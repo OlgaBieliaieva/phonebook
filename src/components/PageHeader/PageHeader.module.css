@@ -1,0 +1,24 @@
+.pageHeaderWrapper {
+  width: 100%;
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.titleWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pageTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+.headerBtn {
+  padding: 4px 8px;
+  background-color: #dde1ee;
+  outline: none;
+  border-radius: 12px;
+}

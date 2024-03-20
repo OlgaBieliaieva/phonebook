@@ -1,0 +1,9 @@
+.formInput {  
+  width: 100%;
+  display: block;  
+  padding: 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  outline: none;
+  border: 1px solid #DDE1EE;
+}

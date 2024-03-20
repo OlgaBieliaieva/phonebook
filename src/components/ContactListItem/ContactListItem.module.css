@@ -1,0 +1,106 @@
+.contactItem {
+  max-width: 100%;
+  background-color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  @media screen and (min-width: 390px) {
+    flex-direction: row;
+  }
+  @media screen and (min-width: 768px) {
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 16px;
+  }
+  @media screen and (min-width: 1024px) {
+    flex-direction: row;
+    padding: 16px 24px;
+    gap: 16px;
+  }
+}
+.descriptionWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.contactName {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px){
+    font-size: 18px;
+  }
+}
+.contactRole {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: #a0a4ac;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px){
+    font-size: 16px;
+  }
+}
+.btnList {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.listItemBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+  color: #a0a4ac;
+  font-weight: 500;
+}
+
+.listItemBtn:hover {
+  background-color: #a0a4ac;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btnIcon {
+  width: 16px;
+  height: 16px;
+  @media screen and (min-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+.modalContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 24px;
+  font-size: 18px;
+  text-align: center;
+  font-weight: 500;
+}
+.contactDetails {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

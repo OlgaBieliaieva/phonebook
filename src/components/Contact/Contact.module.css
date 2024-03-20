@@ -1,0 +1,104 @@
+.contactWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+.mainInfoWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  margin-top: 24px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #e7ecf2;
+}
+.toolsList {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+.toolsBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  color: #a0a4ac;
+  font-weight: 500;
+}
+
+.toolsBtn:hover {
+  background-color: #a0a4ac;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btnIcon {
+  width: 16px;
+  height: 16px;
+  @media screen and (min-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+.avatar {
+  width: 96px;
+  height: 96px;
+  position: absolute;
+  top: -32px;
+  left: 24px;
+}
+.contactName {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 18px;
+  }
+}
+.contactRole {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: #a0a4ac;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
+  }
+}
+.fullInfoWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.infoItem {
+  display: flex;
+  align-items: normal;
+  gap: 12px;
+  
+}
+.itemContent {
+    width: 100%;
+    border-bottom: 1px solid #bec1c9;
+    padding-bottom: 16px;
+    font-size: 18px;
+    /* @media screen and (min-width: 768px) {
+        font-size: 18px;
+      } */
+}

@@ -1,0 +1,12 @@
+.contactList {
+  width: 100%;
+  height: calc(100vh - 124px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+  overflow-y: scroll;
+  overscroll-behavior-block: contain;
+}
+

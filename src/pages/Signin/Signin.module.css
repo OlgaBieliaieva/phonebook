@@ -1,0 +1,53 @@
+.pageContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(/public/hero_1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.contentWrapper {
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  @media screen and (min-width: 520px) {
+    max-width: 80%;
+  }
+  @media screen and (min-width: 768px) {
+    max-width: 70%;
+  }
+  @media screen and (min-width: 820px) {
+    max-width: 60%;
+  }
+  @media screen and (min-width: 1024px) {
+    max-width: 50%;
+  }
+  @media screen and (min-width: 1280px) {
+    max-width: 640px;
+  }
+}
+.pageTitle {
+  text-align: center;
+  font-size: 18px;
+  color: #9c27b0;
+
+  @media screen and (min-width: 360px) {
+    font-size: 24px;
+  }
+  
+  @media screen and (min-width: 768px) {
+    font-size: 32px;
+  }
+  @media screen and (min-width: 820px) {
+    font-size: 36px;
+  }
+  @media screen and (min-width: 1024px) {
+    font-size: 40px;
+  }
+  
+}
