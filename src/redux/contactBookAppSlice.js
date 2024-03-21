@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchContacts,
   addContact,
-  deleteContact,
+  // deleteContact,
   fetchUsers,
   register,
   login,

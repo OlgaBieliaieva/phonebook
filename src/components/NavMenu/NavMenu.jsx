@@ -14,10 +14,10 @@ import QuestionMarkSharpIcon from '@mui/icons-material/QuestionMarkSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import { Link } from 'react-router-dom';
-import { useAuth } from 'hooks/useAuth';
+// import { useAuth } from 'hooks/useAuth';
 
 export default function NavMenu() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   return (
     <List
       sx={{

@@ -1,6 +1,5 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { filter } from 'redux/contactBookAppSlice';
-import { getFilterQuery } from 'redux/selectors';
 import css from './Filter.module.css';
 
 export default function Filter() {
@@ -16,7 +15,7 @@ export default function Filter() {
       <input
         className={css.formInput}
         type="text"
-        name="filter"       
+        name="filter"
         onChange={handleFilterChange}
         placeholder="Search by name"
         autoComplete="off"
