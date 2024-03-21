@@ -14,7 +14,9 @@ export const selectFilteredContacts = createSelector(
       if (contact.owner === currentUser.id) {
         const contactFullName = `${contact.firstName} ${contact.middleName} ${contact.lastName}`;
         return contactFullName.toLowerCase().includes(filter.toLowerCase());
-      } else {return null}
+      } else {
+        return null;
+      }
     });
   }
 );

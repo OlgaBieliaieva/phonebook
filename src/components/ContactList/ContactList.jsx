@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts } from 'redux/operations';
-// import { deleteContact } from 'redux/operations';
 import { selectFilteredContacts } from 'redux/selectors';
 import ContactListItem from 'components/ContactListItem/ContactListItem';
 import css from './ContactList.module.css';
@@ -13,11 +12,6 @@ export default function ContactList() {
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
-
-  // const removeContact = e => {
-  //   const contactId = e.target.id;
-  //   dispatch(deleteContact(contactId));
-  // };
 
   return (
     <>

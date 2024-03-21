@@ -82,6 +82,26 @@
     font-size: 16px;
   }
 }
+.contactAttributesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contactAttribute {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.contactAttributeItemsList {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.contactAttributeItem {
+  padding: 6px 12px;
+  border-radius: 16px;
+  background-color: #fff;
+}
 .fullInfoWrapper {
   display: flex;
   flex-direction: column;
@@ -91,14 +111,13 @@
   display: flex;
   align-items: normal;
   gap: 12px;
-  
 }
 .itemContent {
-    width: 100%;
-    border-bottom: 1px solid #bec1c9;
-    padding-bottom: 16px;
-    font-size: 18px;
-    /* @media screen and (min-width: 768px) {
+  width: 100%;
+  border-bottom: 1px solid #bec1c9;
+  padding-bottom: 16px;
+  font-size: 18px;
+  /* @media screen and (min-width: 768px) {
         font-size: 18px;
       } */
 }

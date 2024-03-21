@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuth } from 'hooks/useAuth';
-import { addContact } from 'redux/operations';
+import { addContact, updateContact } from 'redux/operations';
 import { selectContacts } from 'redux/selectors';
 import css from './ContactForm.module.css';
 
-export default function ContactForm({ onClose }) {
-  const [firstName, setFirstName] = useState('');
-  const [middleName, setMiddleName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [company, setCompany] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState('');
+export default function ContactForm({ onClose, contact = {} }) {
+  const [firstName, setFirstName] = useState(
+    contact.id ? contact.firstName : ''
+  );
+  const [middleName, setMiddleName] = useState(() =>
+    contact.id ? contact.middleName : ''
+  );
+  const [lastName, setLastName] = useState(contact.id ? contact.lastName : '');
+  const [jobTitle, setJobTitle] = useState(contact.id ? contact.jobTitle : '');
+  const [company, setCompany] = useState(contact.id ? contact.company : '');
+  const [phone, setPhone] = useState(contact.id ? contact.phone : '');
+  const [email, setEmail] = useState(contact.id ? contact.email : '');
+  const [birthday, setBirthday] = useState(contact.id ? contact.birthday : '');
+  const [note, setNote] = useState(contact.id ? contact.note : '');
 
   const { user } = useAuth();
   const contacts = useSelector(selectContacts);
@@ -21,6 +26,7 @@ export default function ContactForm({ onClose }) {
 
   const handleChange = e => {
     const { name, value } = e.target;
+
     switch (name) {
       case 'firstName':
         setFirstName(value);
@@ -54,6 +60,10 @@ export default function ContactForm({ onClose }) {
         setBirthday(value);
         break;
 
+      case 'note':
+        setNote(value);
+        break;
+
       default:
         return;
     }
@@ -61,9 +71,32 @@ export default function ContactForm({ onClose }) {
 
   const handleSubmit = e => {
     e.preventDefault(e);
-    createContact();
+    console.log(middleName);
+    contact.id ? changeContact() : createContact();
     reset();
     onClose();
+  };
+
+  const changeContact = () => {
+    const updatedContact = {
+      firstName: firstName,
+      middleName: middleName,
+      lastName: lastName,
+      jobTitle: jobTitle,
+      company: company,
+      phone: phone,
+      email: email,
+      birthday: birthday,
+      createdAt: contact.createdAt,
+      groups: contact.groups,
+      tags: contact.tags,
+      note: contact.note,
+      owner: contact.owner,
+      avatar: contact.avatar,
+      id: contact.id,
+    };
+
+    dispatch(updateContact({ ...updatedContact }));
   };
 
   const createContact = () => {
@@ -79,7 +112,7 @@ export default function ContactForm({ onClose }) {
       createdAt: Date.now(),
       groups: [],
       tags: [],
-      note: [],
+      note: '',
       owner: user.id,
     };
     const isExist = contacts.find(
@@ -91,7 +124,7 @@ export default function ContactForm({ onClose }) {
       alert(`${phone} is already in contacts`);
       return;
     }
-    
+
     dispatch(addContact(newContact));
   };
 
@@ -108,7 +141,7 @@ export default function ContactForm({ onClose }) {
 
   return (
     <form className={css.contactForm} onSubmit={handleSubmit}>
-      <h3>Add New Contact </h3>
+      <h3>{contact.id ? 'Update Contact' : 'Add New Contact'} </h3>
       <label className={css.formLabel}>
         First name
         <input
@@ -197,7 +230,7 @@ export default function ContactForm({ onClose }) {
         Birthday
         <input
           className={css.formInput}
-          type="date"
+          type="text"
           name="birthday"
           value={birthday}
           onChange={handleChange}
@@ -205,8 +238,20 @@ export default function ContactForm({ onClose }) {
           autoComplete="off"
         />
       </label>
+      <label className={css.formLabel}>
+        Note
+        <input
+          className={css.formInput}
+          type="text"
+          name="note"
+          value={note}
+          onChange={handleChange}
+          autoComplete="off"
+        />
+      </label>
+
       <button className={css.formBtn} type="submit">
-        Add contact
+        {contact.id ? 'Update Contact' : 'Add contact'}
       </button>
     </form>
   );
