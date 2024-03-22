@@ -5,7 +5,13 @@ export default function PageHeader({ title, btnTitle, btnAction, children }) {
     <div className={css.pageHeaderWrapper}>
       <div className={css.titleWrapper}>
         <h1 className={css.pageTitle}>{title}</h1>
-        <button className={css.headerBtn} type="button" onClick={()=> btnAction()}>{btnTitle}</button>
+        <button
+          className={css.headerBtn}
+          type="button"
+          onClick={() => btnAction()}
+        >
+          {btnTitle}
+        </button>
       </div>
       {children}
     </div>

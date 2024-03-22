@@ -71,7 +71,6 @@ export default function ContactForm({ onClose, contact = {} }) {
 
   const handleSubmit = e => {
     e.preventDefault(e);
-    console.log(middleName);
     contact.id ? changeContact() : createContact();
     reset();
     onClose();

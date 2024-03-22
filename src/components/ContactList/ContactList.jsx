@@ -1,18 +1,7 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchContacts } from 'redux/operations';
-import { selectFilteredContacts } from 'redux/selectors';
 import ContactListItem from 'components/ContactListItem/ContactListItem';
 import css from './ContactList.module.css';
 
-export default function ContactList() {
-  const contacts = useSelector(selectFilteredContacts);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
+export default function ContactList({ contacts, linkBtn }) {
   return (
     <>
       <ul className={css.contactList}>
@@ -40,6 +29,7 @@ export default function ContactList() {
                 company={company}
                 phone={phone}
                 email={email}
+                linkBtn={linkBtn}
               />
             );
           }

@@ -1,52 +1,40 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import useModal from 'hooks/useModal';
 import { useAuth } from 'hooks/useAuth';
-import { fetchContacts } from 'redux/operations';
-import { selectFilteredContacts } from 'redux/selectors';
 import Modal from 'components/Modal/Modal';
 import PageHeader from 'components/PageHeader/PageHeader';
-import Filter from 'components/Filter/Filter';
-import ContactList from 'components/ContactList/ContactList';
-import ContactForm from 'components/ContactForm/ContactForm';
+import GroupsList from 'components/GroupsList/GroupsList';
 import PermContactCalendarSharpIcon from '@mui/icons-material/PermContactCalendarSharp';
-import css from './Contacts.module.css';
+import css from './Groups.module.css';
 
-export default function Contacts() {
-  const contacts = useSelector(selectFilteredContacts);
-  const dispatch = useDispatch();
+export default function Groups() {
   const { ref, onOpen, onClose } = useModal();
   const { user } = useAuth();
   const location = useLocation().pathname.split('/');
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
 
   return (
     <>
       <div className={css.contactsWrapper}>
         <PageHeader
-          title="All Contacts"
-          btnTitle="Add Contact"
+          title="All Groups"
+          btnTitle="Add Group"
           btnAction={onOpen}
-        >
-          <Filter />
-        </PageHeader>
-        <ContactList contacts={contacts} linkBtn={true} />
+        ></PageHeader>
+        <GroupsList groups={user.groups} />
         <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
-          <ContactForm onClose={onClose} />
+          <div className={css.modalContent}>
+            <p>This feature is under development</p>
+          </div>
         </Modal>
       </div>
       <div className={css.contactDetailsWrapper}>
-        {location[location.length - 1] !== 'all' ? (
+        {location[location.length - 1] !== 'groups' ? (
           <Outlet />
         ) : (
           <div className={css.welcomePage}>
             <PermContactCalendarSharpIcon className={css.welcomePageIcon} />
             <p>{user.name}&#44;</p>
-            <p>choose some contact for details</p>
+            <p>choose some group for details</p>
           </div>
         )}
       </div>

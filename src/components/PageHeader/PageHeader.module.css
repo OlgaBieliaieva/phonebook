@@ -15,6 +15,7 @@
 .pageTitle {
   font-size: 16px;
   font-weight: 700;
+  text-transform: capitalize;
 }
 .headerBtn {
   padding: 4px 8px;

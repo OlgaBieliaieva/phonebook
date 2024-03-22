@@ -1,7 +1,7 @@
 .workspace {
   width: 85%;
   height: 100vh;
-  margin-left: 15%;  
+  margin-left: 15%;
   position: relative;
 
   @media screen and (min-width: 535px) {
@@ -9,7 +9,7 @@
     margin-left: 80px;
   }
 
-  @media screen and (min-width: 768px){
+  @media screen and (min-width: 768px) {
     display: flex;
   }
 }

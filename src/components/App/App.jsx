@@ -13,9 +13,13 @@ const Signin = lazy(() => import('../../pages/Signin/Signin'));
 const Signup = lazy(() => import('../../pages/Signup/Signup'));
 const Dashboard = lazy(() => import('../Dashboard/Dashboard'));
 const Contacts = lazy(() => import('../../pages/Contacts/Contacts'));
-const ContactDetails=lazy(()=> import('../../pages/ContactDetails/ContactDetails'))
-// const Cast = lazy(() => import('./Cast/Cast'));
-// const Reviews = lazy(() => import('./Reviews/Reviews'));
+const ContactDetails = lazy(() =>
+  import('../../pages/ContactDetails/ContactDetails')
+);
+const Groups = lazy(() => import('../../pages/Groups/Groups'));
+const GroupDetails = lazy(() =>
+  import('../../pages/GroupDetails/GroupDetails')
+);
 
 export default function App() {
   const { user } = useAuth();
@@ -63,51 +67,24 @@ export default function App() {
           >
             <Route
               path=":contactId"
-              element={<PrivateRoute redirectTo="/" component={<ContactDetails />} />}
+              element={
+                <PrivateRoute redirectTo="/" component={<ContactDetails />} />
+              }
+            />
+          </Route>
+          <Route
+            path="groups"
+            element={<PrivateRoute redirectTo="/" component={<Groups />} />}
+          >
+            <Route
+              path=":group"
+              element={
+                <PrivateRoute redirectTo="/" component={<GroupDetails />} />
+              }
             />
           </Route>
         </Route>
-        {/* <Route path="group/all" element={<Home />}>
-            <Route path={`contact/:contactId`} element={<Home />} />
-          </Route>
-          <Route path="group/:groupId" element={<Home />}>
-            <Route path={`contact/:contactId`} element={<Home />} />
-          </Route> */}
-        {/* <Route path="reviews" element={<Reviews />} /> */}
-        {/* </Route> */}
-        {/* <Route path="*" element={<Signin />} /> */}
       </Route>
     </Routes>
   );
 }
-
-// import { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchContacts } from 'redux/operations';
-// import { getError, getIsLoading } from 'redux/selectors';
-// import SectionTitle from '../SectionTitle/SectionTitle';
-// import ContactForm from '../ContactForm/ContactForm';
-// import Filter from '../Filter/Filter';
-// import ContactList from '../ContactList/ContactList';
-// import css from './App.module.css';
-
-// export default function App() {
-//   const dispatch = useDispatch();
-//   // const isLoading = useSelector(getIsLoading);
-//   // const error = useSelector(getError);
-
-//   useEffect(() => {
-//     dispatch(fetchContacts());
-//   }, [dispatch]);
-
-//   return (
-//     <main className={css.appContainer}>
-//       <SectionTitle text="Phonebook" />
-//       <ContactForm />
-//       <SectionTitle text="Contacts" />
-//       <Filter />
-//       {/* {isLoading && !error && <b>Request in progress...</b>} */}
-//       <ContactList />
-//     </main>
-//   );
-// }

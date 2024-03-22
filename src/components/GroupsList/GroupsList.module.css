@@ -1,6 +1,6 @@
-.contactList {
+.groupsList {
   width: 100%;
-  height: calc(100vh - 124px);
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   gap: 12px;

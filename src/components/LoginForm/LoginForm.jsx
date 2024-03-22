@@ -24,7 +24,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     const form = e.currentTarget;
-    //
+
     if (
       form.elements.email.value !== '' &&
       form.elements.password.value !== ''

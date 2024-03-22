@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import useModal from 'hooks/useModal';
+import Modal from 'components/Modal/Modal';
 import {
   List,
   ListItem,
@@ -13,270 +16,286 @@ import CalendarMonthSharpIcon from '@mui/icons-material/CalendarMonthSharp';
 import QuestionMarkSharpIcon from '@mui/icons-material/QuestionMarkSharp';
 import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
-import { Link } from 'react-router-dom';
-// import { useAuth } from 'hooks/useAuth';
+import css from './NavMenu.module.css';
 
 export default function NavMenu() {
-  // const { user } = useAuth();
+  const { ref, onOpen, onClose } = useModal();
   return (
-    <List
-      sx={{
-        color: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '24px',
-        width: '100%',
-        paddingTop: 0,
-        paddingBottom: 0,
-      }}
-    >
-      <ListItem
-        key={'Home'}
-        disablePadding
+    <>
+      <List
         sx={{
-          maxWidth: '100%',
+          color: '#fff',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          gap: '24px',
+          width: '100%',
+          paddingTop: 0,
+          paddingBottom: 0,
         }}
       >
-        <Link
-          to="/"
-          style={{
+        <ListItem
+          key={'Home'}
+          disablePadding
+          sx={{
+            maxWidth: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Link
+            to="/"
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ListItemButton
+              sx={{
+                padding: 0,
+                maxWidth: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: '#fff',
+                  minWidth: '40px',
+                  maxWidth: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Tooltip title="Home" arrow>
+                  <HomeSharpIcon />
+                </Tooltip>
+              </ListItemIcon>
+            </ListItemButton>
+          </Link>
+        </ListItem>
+
+        <ListItem
+          key={'Contacts'}
+          disablePadding
+          sx={{
+            maxWidth: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Link
+            to="all"
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <ListItemButton
+              sx={{
+                padding: 0,
+                maxWidth: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: '#fff',
+                  minWidth: '40px',
+                  maxWidth: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Tooltip title="Contacts" arrow>
+                  <ContactsSharpIcon />
+                </Tooltip>
+              </ListItemIcon>
+            </ListItemButton>
+          </Link>
+        </ListItem>
+
+        <ListItem
+          key={'Groups'}
+          disablePadding
+          sx={{
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <ListItemButton
-            sx={{
-              padding: 0,
-              maxWidth: '100%',
+          <Link
+            to="groups"
+            style={{
+              width: '100%',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            <ListItemIcon
-              sx={{
-                color: '#fff',
-                minWidth: '40px',
-                maxWidth: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Tooltip title="Home" arrow>
-                <HomeSharpIcon />
-              </Tooltip>
-            </ListItemIcon>
-          </ListItemButton>
-        </Link>
-      </ListItem>
+            <ListItemButton sx={{ padding: 0, width: '100%' }}>
+              <ListItemIcon
+                sx={{
+                  color: '#fff',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Tooltip title="Groups" arrow>
+                  <GroupSharpIcon />
+                </Tooltip>
+              </ListItemIcon>
+            </ListItemButton>
+          </Link>
+        </ListItem>
 
-      <ListItem
-        key={'Contacts'}
-        disablePadding
-        sx={{
-          maxWidth: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Link
-          to="all"
-          style={{
+        <ListItem
+          key={'Tags'}
+          disablePadding
+          sx={{
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <ListItemButton
-            sx={{
-              padding: 0,
-              maxWidth: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
             <ListItemIcon
               sx={{
                 color: '#fff',
-                minWidth: '40px',
-                maxWidth: '100%',
+                width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
             >
-              <Tooltip title="Contacts" arrow>
-                <ContactsSharpIcon />
+              <Tooltip title="Tags" arrow>
+                <TagSharpIcon />
               </Tooltip>
             </ListItemIcon>
           </ListItemButton>
-        </Link>
-      </ListItem>
+        </ListItem>
 
-      <ListItem
-        key={'Groups'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Groups" arrow>
-              <GroupSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
+        <ListItem
+          key={'Notifications'}
+          disablePadding
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+            <ListItemIcon
+              sx={{
+                color: '#fff',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Tooltip title="Notifications" arrow>
+                <NotificationsSharpIcon />
+              </Tooltip>
+            </ListItemIcon>
+          </ListItemButton>
+        </ListItem>
 
-      <ListItem
-        key={'Tags'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Tags" arrow>
-              <TagSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
+        <ListItem
+          key={'Calendar'}
+          disablePadding
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+            <ListItemIcon
+              sx={{
+                color: '#fff',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Tooltip title="Calendar" arrow>
+                <CalendarMonthSharpIcon />
+              </Tooltip>
+            </ListItemIcon>
+          </ListItemButton>
+        </ListItem>
 
-      <ListItem
-        key={'Notifications'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Notifications" arrow>
-              <NotificationsSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
+        <ListItem
+          key={'Support'}
+          disablePadding
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+            <ListItemIcon
+              sx={{
+                color: '#fff',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Tooltip title="Support" arrow>
+                <QuestionMarkSharpIcon />
+              </Tooltip>
+            </ListItemIcon>
+          </ListItemButton>
+        </ListItem>
 
-      <ListItem
-        key={'Calendar'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Calendar" arrow>
-              <CalendarMonthSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
-
-      <ListItem
-        key={'Support'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Support" arrow>
-              <QuestionMarkSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
-
-      <ListItem
-        key={'Settings'}
-        disablePadding
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <ListItemButton sx={{ padding: 0, width: '100%' }}>
-          <ListItemIcon
-            sx={{
-              color: '#fff',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Tooltip title="Settings" arrow>
-              <SettingsSharpIcon />
-            </Tooltip>
-          </ListItemIcon>
-        </ListItemButton>
-      </ListItem>
-    </List>
+        <ListItem
+          key={'Settings'}
+          disablePadding
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+            <ListItemIcon
+              sx={{
+                color: '#fff',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Tooltip title="Settings" arrow>
+                <SettingsSharpIcon />
+              </Tooltip>
+            </ListItemIcon>
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
+        <div className={css.modalContent}>
+          <p>This feature is under development</p>
+        </div>
+      </Modal>
+    </>
   );
 }

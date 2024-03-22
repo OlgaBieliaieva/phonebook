@@ -18,6 +18,7 @@ export default function ContactListItem({
   company,
   phone,
   email,
+  linkBtn,
 }) {
   const [targetBtn, setTargetBtn] = useState('');
   const { ref, onOpen, onClose } = useModal();
@@ -61,18 +62,18 @@ export default function ContactListItem({
             <EmailSharpIcon className={css.btnIcon} />
           </button>
         </li>
-        <li>
-          <Link to={id} className={css.listItemBtn}>
-            <VisibilitySharpIcon className={css.btnIcon} />
-          </Link>
-        </li>
+        {linkBtn && (
+          <li>
+            <Link to={id} className={css.listItemBtn}>
+              <VisibilitySharpIcon className={css.btnIcon} />
+            </Link>
+          </li>
+        )}
       </ul>
 
       <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
         <div className={css.modalContentWrapper}>
-          <p
-            
-          >{`${firstName} ${middleName} ${lastName}`}</p>
+          <p>{`${firstName} ${middleName} ${lastName}`}</p>
           <div className={css.contactDetails}>
             {targetBtn === 'phone' ? (
               <PhoneEnabledSharpIcon />

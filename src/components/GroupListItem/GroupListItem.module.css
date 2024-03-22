@@ -1,0 +1,32 @@
+.groupItem {
+  max-width: 100%;
+  background-color: #fff;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 12px 16px;
+}
+.groupItemLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.groupItemNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.groupItemIcon {
+  width: 40px;
+  height: 40px;
+  fill: #a0a4ac;
+}
+.groupItemChip {
+  padding: 8px 16px;
+  border-radius: 16px;
+  background-color: #a0a4ac;
+  color: #fff;
+  font-size: 12px;
+}
