@@ -38,7 +38,7 @@ export default function App() {
           index
           element={
             <RestrictedRoute
-              redirectTo={`contacts/${user?.id}`}
+              redirectTo={`/contacts/${user?.id}`}
               component={<Signin />}
             />
           }
@@ -47,7 +47,7 @@ export default function App() {
           path="/signup"
           element={
             <RestrictedRoute
-              redirectTo={`contacts/${user?.id}`}
+              redirectTo={`/contacts/${user?.id}`}
               component={<Signup />}
             />
           }

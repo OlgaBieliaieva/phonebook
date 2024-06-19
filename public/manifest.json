@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SmartBook",
+  "name": "SmartBook - online phone book for business contacts",
   "icons": [
     {
       "src": "favicon.ico",

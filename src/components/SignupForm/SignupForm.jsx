@@ -32,7 +32,6 @@ export default function SignupForm() {
       groups: [],
       tags: [],
     };
-    console.log(newUser);
 
     dispatch(register({ ...newUser }));
     form.reset();
@@ -66,8 +65,7 @@ export default function SignupForm() {
             Sign up
           </Typography>
           <Box
-            component="form"
-            noValidate
+            component="form"            
             autoComplete="off"
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
@@ -109,7 +107,7 @@ export default function SignupForm() {
               Sign Up
             </Button>
             <Grid container>
-              <Link to="/signin">Already have an account? Sign In</Link>
+              <Link to="/">Already have an account? Sign In</Link>
             </Grid>
           </Box>
         </Box>

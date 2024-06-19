@@ -8,25 +8,37 @@ export const register = createAsyncThunk(
   'contactBookApp/register',
   async (user, thunkAPI) => {
     try {
-      const response = await axios.post('/users', { ...user });
-      return response.data;
+      const { data } = await axios.get(`/users`);
+      const isExist = data.find(item => item.email === user.email);
+      console.log(isExist);
+      if (isExist) {
+        return Notify.failure('Email is already in use');
+      }
+      await axios.post('/users', { ...user });
+
+      const { data: currentUser } = await axios.get(
+        `/users?email=${user.email}`
+      );
+      localStorage.setItem('user', currentUser[0].id);
+
+      return currentUser[0];
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
 
-export const fetchUsers = createAsyncThunk(
-  'contactBookApp/fetchUsers',
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.get('/users');
-      return response.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
+// export const fetchUsers = createAsyncThunk(
+//   'contactBookApp/fetchUsers',
+//   async (_, thunkAPI) => {
+//     try {
+//       const response = await axios.get('/users');
+//       return response.data;
+//     } catch (e) {
+//       return thunkAPI.rejectWithValue(e.message);
+//     }
+//   }
+// );
 
 export const login = createAsyncThunk(
   'contactBookApp/login',
@@ -43,7 +55,7 @@ export const login = createAsyncThunk(
           localStorage.setItem('user', currentUser.id);
           return currentUser;
         } else {
-          Notify.failure({ message: 'Invalid email or password' });
+          return Notify.failure('Invalid email or password');
         }
       }
     } catch (e) {

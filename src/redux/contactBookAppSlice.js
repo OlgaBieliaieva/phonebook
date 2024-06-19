@@ -4,7 +4,7 @@ import {
   addContact,
   deleteContact,
   updateContact,
-  fetchUsers,
+  // fetchUsers,
   register,
   login,
   logout,
@@ -76,13 +76,13 @@ const contactBookAppSlice = createSlice({
       })
       .addCase(updateContact.rejected, handleRejected)
 
-      .addCase(fetchUsers.pending, handlePending)
-      .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
-        state.users = [...action.payload];
-      })
-      .addCase(fetchUsers.rejected, handleRejected)
+      // .addCase(fetchUsers.pending, handlePending)
+      // .addCase(fetchUsers.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = null;
+      //   state.users = [...action.payload];
+      // })
+      // .addCase(fetchUsers.rejected, handleRejected)
 
       .addCase(login.pending, handlePending)
       .addCase(login.fulfilled, (state, action) => {
@@ -103,10 +103,11 @@ const contactBookAppSlice = createSlice({
       .addCase(logout.rejected, handleRejected)
 
       .addCase(register.pending, handlePending)
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {        
         state.isLoading = false;
-        state.error = null;
-        state.users.push({ ...action.payload });
+        state.error = null;  
+        state.currentUser = { ...action.payload };
+        state.isLoggedIn = true;              
       })
       .addCase(register.rejected, handleRejected)
 
