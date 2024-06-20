@@ -8,7 +8,7 @@ export default function Dashboard() {
   return (
     <div className={css.welcomePage}>
       <ImportContactsSharpIcon sx={{ width: '64px', height: '64px' }} />
-      <p>{user.name}&#44;</p>
+      <p>{user?.name}&#44;</p>
       <p>welcome to SmartBook</p>
     </div>
   );

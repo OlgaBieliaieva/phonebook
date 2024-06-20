@@ -1,32 +1,8 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Notify } from 'notiflix';
+// import { Notify } from 'notiflix';
 
-axios.defaults.baseURL = 'https://65f2b95a034bdbecc765a5da.mockapi.io/';
-
-export const register = createAsyncThunk(
-  'contactBookApp/register',
-  async (user, thunkAPI) => {
-    try {
-      const { data } = await axios.get(`/users`);
-      const isExist = data.find(item => item.email === user.email);
-      console.log(isExist);
-      if (isExist) {
-        return Notify.failure('Email is already in use');
-      }
-      await axios.post('/users', { ...user });
-
-      const { data: currentUser } = await axios.get(
-        `/users?email=${user.email}`
-      );
-      localStorage.setItem('user', currentUser[0].id);
-
-      return currentUser[0];
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
+// axios.defaults.baseURL = 'https://65f2b95a034bdbecc765a5da.mockapi.io/';
 
 // export const fetchUsers = createAsyncThunk(
 //   'contactBookApp/fetchUsers',
@@ -39,64 +15,6 @@ export const register = createAsyncThunk(
 //     }
 //   }
 // );
-
-export const login = createAsyncThunk(
-  'contactBookApp/login',
-  async (credentials, thunkAPI) => {
-    try {
-      const users = await axios.get('/users');
-      if (users.status === 200) {
-        const currentUser = users.data.find(
-          user =>
-            user.email === credentials.email &&
-            user.password === credentials.password
-        );
-        if (currentUser) {
-          localStorage.setItem('user', currentUser.id);
-          return currentUser;
-        } else {
-          return Notify.failure('Invalid email or password');
-        }
-      }
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const logout = createAsyncThunk(
-  'contactBookApp/logout',
-  async (_, thunkAPI) => {
-    try {
-      localStorage.clear();
-      return null;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const refresh = createAsyncThunk(
-  'contactBookApp/refresh',
-  async (_, thunkAPI) => {
-    try {
-      const users = await axios.get('/users');
-      const userId = JSON.parse(localStorage.getItem('user'));
-      if (userId) {
-        if (users.status === 200) {
-          const currentUser = users.data.find(
-            user => user.id === userId.toString()
-          );
-          return currentUser;
-        }
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
 
 export const fetchContacts = createAsyncThunk(
   'contactBookApp/fetchContacts',

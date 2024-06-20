@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { register } from 'redux/operations';
+import { register } from 'redux/auth/operations';
 // MUI
 import {
   Avatar,

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login } from 'redux/operations';
+import { login } from 'redux/auth/operations';
 // MUI
 import {
   Avatar,
@@ -68,7 +68,6 @@ export default function LoginForm() {
           </Typography>
           <Box
             component="form"
-            noValidate
             autoComplete="off"
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
