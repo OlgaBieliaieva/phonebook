@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useAuth } from 'hooks/useAuth';
 import { addContact, updateContact } from 'redux/operations';
-import { selectContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/contacts/selectors';
+
 import css from './ContactForm.module.css';
 
-export default function ContactForm({ onClose, contact = {} }) {
+export default function ContactForm({ onClose, contact = {}, userGroups, userTags }) {
   const [firstName, setFirstName] = useState(
     contact.id ? contact.firstName : ''
   );
@@ -19,6 +20,8 @@ export default function ContactForm({ onClose, contact = {} }) {
   const [email, setEmail] = useState(contact.id ? contact.email : '');
   const [birthday, setBirthday] = useState(contact.id ? contact.birthday : '');
   const [note, setNote] = useState(contact.id ? contact.note : '');
+  const [groups, setGroups] = useState(contact.id ? [...contact.groups] : []);
+  const [tags, setTags] = useState(contact.id ? [...contact.tags] : [])
 
   const { user } = useAuth();
   const contacts = useSelector(selectContacts);
@@ -247,6 +250,12 @@ export default function ContactForm({ onClose, contact = {} }) {
           onChange={handleChange}
           autoComplete="off"
         />
+      </label>
+      <label>
+        <select name="groups" id="groups">
+          <option value="none" disabled>groups</option>
+
+        </select>
       </label>
 
       <button className={css.formBtn} type="submit">

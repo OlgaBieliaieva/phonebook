@@ -1,17 +1,56 @@
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
-import { forwardRef } from 'react';
 import css from './Modal.module.css';
 
-const Modal = forwardRef(({ children, onClose }, ref) => {
-  return (
-    <dialog ref={ref} className={css.modal}>
-      <button type="button" onClick={onClose} className={css.closeBtn}>
-        <CloseSharpIcon />
-      </button>
-      {children}
-    </dialog>
-  );
-});
+const modalRoot = document.querySelector('#modal-root');
 
-Modal.displayName = 'Modal';
-export default Modal;
+export default function Modal({ onClose, children }) {
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === 'Escape') onClose();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
+
+  const handleBackdropClick = event => {
+    if (event.currentTarget === event.target) {
+      onClose();
+    }
+  };
+
+  return createPortal(
+    <div className={css.backdrop} onClick={handleBackdropClick}>
+      <div className={css.content}>
+        <button type="button" onClick={onClose} className={css.closeBtn}>
+          <CloseSharpIcon />
+        </button>
+        {children}
+      </div>
+    </div>,
+    modalRoot
+  );
+}
+
+// import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+// import { forwardRef } from 'react';
+// import css from './Modal.module.css';
+
+// const Modal = forwardRef(({ children, onClose }, ref) => {
+//   return (
+//     <dialog ref={ref} className={css.modal}>
+//       <button type="button" onClick={onClose} className={css.closeBtn}>
+//         <CloseSharpIcon />
+//       </button>
+//       {children}
+//     </dialog>
+//   );
+// });
+
+// Modal.displayName = 'Modal';
+// export default Modal;

@@ -4,13 +4,17 @@
   align-items: center;
   gap: 24px;
   padding: 64px 16px;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   @media screen and (min-width: 768px) {
-    padding: 64px 24px;
+    padding: 64px 32px;
   }
   @media screen and (min-width: 1280px) {
     padding: 64px 48px;
   }
 }
+
 .formLabel {
   width: 100%;
   font-weight: 500;

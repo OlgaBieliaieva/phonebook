@@ -1,53 +1,73 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import useModal from 'hooks/useModal';
 import { useAuth } from 'hooks/useAuth';
-import { fetchContacts } from 'redux/operations';
-import { selectFilteredContacts } from 'redux/selectors';
+import { fetchContacts } from 'redux/contacts/operations';
+import { fetchGroups } from 'redux/groups/operations';
+import { fetchTags } from 'redux/tags/operations';
+import { selectContacts } from 'redux/contacts/selectors';
+import { selectGroups } from 'redux/groups/selectors';
+import { selectTags } from 'redux/tags/selectors';
 import Modal from 'components/Modal/Modal';
 import PageHeader from 'components/PageHeader/PageHeader';
 import Filter from 'components/Filter/Filter';
 import ContactList from 'components/ContactList/ContactList';
 import ContactForm from 'components/ContactForm/ContactForm';
-import PermContactCalendarSharpIcon from '@mui/icons-material/PermContactCalendarSharp';
+import InfoText from 'components/InfoText/InfoText';
 import css from './Contacts.module.css';
 
 export default function Contacts() {
-  const contacts = useSelector(selectFilteredContacts);
+  const contacts = useSelector(selectContacts);
+  const groups = useSelector(selectGroups);
+  const tags = useSelector(selectTags);
   const dispatch = useDispatch();
-  const { ref, onOpen, onClose } = useModal();
+  const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const location = useLocation().pathname.split('/');
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(fetchContacts(user.id));
+    dispatch(fetchGroups(user.id));
+    dispatch(fetchTags(user.id));
   }, [dispatch]);
 
+  console.log(user);
+  console.log(contacts);
+  console.log(groups);
+  console.log(tags);
   return (
     <>
       <div className={css.contactsWrapper}>
         <PageHeader
           title="All Contacts"
           btnTitle="Add Contact"
-          btnAction={onOpen}
+          btnAction={toggleModal}
         >
           <Filter />
         </PageHeader>
-        <ContactList contacts={contacts} linkBtn={true} />
-        <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
-          <ContactForm onClose={onClose} />
-        </Modal>
+        <div className={css.contentWrapper}>
+          {contacts.length > 0 ? (
+            <ContactList contacts={contacts} linkBtn={true} />
+          ) : (
+            <InfoText text="You don't have any contact yet" />
+          )}
+        </div>
+        {isModalOpen && (
+          <Modal onClose={toggleModal}>
+            <ContactForm
+              onClose={toggleModal}
+              userGroups={groups}
+              userTags={tags}
+            />
+          </Modal>
+        )}
       </div>
       <div className={css.contactDetailsWrapper}>
         {location[location.length - 1] !== 'all' ? (
           <Outlet />
         ) : (
-          <div className={css.welcomePage}>
-            <PermContactCalendarSharpIcon className={css.welcomePageIcon} />
-            <p>{user.name}&#44;</p>
-            <p>choose some contact for details</p>
-          </div>
+          <InfoText text="Choose some contact for details" />
         )}
       </div>
     </>

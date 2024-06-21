@@ -2,8 +2,7 @@ import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Notify } from 'notiflix';
 
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-// 'https://667320036ca902ae11b333e3.mockapi.io/api/';
+axios.defaults.baseURL = 'https://667320036ca902ae11b333e3.mockapi.io/api/';
 
 export const register = createAsyncThunk(
   'contactBookApp/register',

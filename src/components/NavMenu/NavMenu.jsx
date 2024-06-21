@@ -19,7 +19,7 @@ import HomeSharpIcon from '@mui/icons-material/HomeSharp';
 import css from './NavMenu.module.css';
 
 export default function NavMenu() {
-  const { ref, onOpen, onClose } = useModal();
+  const { isModalOpen, toggleModal } = useModal();
   return (
     <>
       <List
@@ -171,7 +171,10 @@ export default function NavMenu() {
             alignItems: 'center',
           }}
         >
-          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+          <ListItemButton
+            sx={{ padding: 0, width: '100%' }}
+            onClick={toggleModal}
+          >
             <ListItemIcon
               sx={{
                 color: '#fff',
@@ -197,7 +200,10 @@ export default function NavMenu() {
             alignItems: 'center',
           }}
         >
-          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+          <ListItemButton
+            sx={{ padding: 0, width: '100%' }}
+            onClick={toggleModal}
+          >
             <ListItemIcon
               sx={{
                 color: '#fff',
@@ -223,7 +229,10 @@ export default function NavMenu() {
             alignItems: 'center',
           }}
         >
-          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+          <ListItemButton
+            sx={{ padding: 0, width: '100%' }}
+            onClick={toggleModal}
+          >
             <ListItemIcon
               sx={{
                 color: '#fff',
@@ -249,7 +258,10 @@ export default function NavMenu() {
             alignItems: 'center',
           }}
         >
-          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+          <ListItemButton
+            sx={{ padding: 0, width: '100%' }}
+            onClick={toggleModal}
+          >
             <ListItemIcon
               sx={{
                 color: '#fff',
@@ -275,7 +287,10 @@ export default function NavMenu() {
             alignItems: 'center',
           }}
         >
-          <ListItemButton sx={{ padding: 0, width: '100%' }} onClick={onOpen}>
+          <ListItemButton
+            sx={{ padding: 0, width: '100%' }}
+            onClick={toggleModal}
+          >
             <ListItemIcon
               sx={{
                 color: '#fff',
@@ -291,11 +306,13 @@ export default function NavMenu() {
           </ListItemButton>
         </ListItem>
       </List>
-      <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
-        <div className={css.modalContent}>
-          <p>This feature is under development</p>
-        </div>
-      </Modal>
+      {isModalOpen && (
+        <Modal onClose={toggleModal} onOpen={toggleModal}>
+          <div className={css.modalContent}>
+            <p>This feature is under development</p>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

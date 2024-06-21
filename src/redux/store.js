@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './auth/slice';
-import { mainStateReducer } from './contactBookAppSlice';
+import { contactsReducer } from './contacts/slice';
+import { groupsReducer } from './groups/slice';
+import { tagsReducer } from './tags/slice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    contactBookApp: mainStateReducer,
+    contacts: contactsReducer,
+    groups: groupsReducer,
+    tags: tagsReducer,
   },
 });

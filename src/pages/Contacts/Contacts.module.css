@@ -1,9 +1,15 @@
 .contactsWrapper {
   width: 100%;
+  height: 100%;
   border: 1px solid #dde1ee;
+
   @media screen and (min-width: 768px) {
     width: 50%;
   }
+}
+.contentWrapper {
+  width: 100%;
+  height: calc(100% - 98px);
 }
 .contactDetailsWrapper {
   position: absolute;
@@ -13,22 +19,4 @@
     position: static;
     width: 50%;
   }
-}
-.welcomePage {
-  display: none;
-  @media screen and (min-width: 768px) {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-    font-size: 22px;
-    background-color: #fff;
-  }
-}
-.welcomePageIcon {
-  width: 48px;
-  height: 48px;
 }
