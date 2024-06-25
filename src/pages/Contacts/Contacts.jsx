@@ -32,10 +32,7 @@ export default function Contacts() {
     dispatch(fetchTags(user.id));
   }, [dispatch]);
 
-  console.log(user);
-  console.log(contacts);
-  console.log(groups);
-  console.log(tags);
+  
   return (
     <>
       <div className={css.contactsWrapper}>
@@ -57,6 +54,7 @@ export default function Contacts() {
           <Modal onClose={toggleModal}>
             <ContactForm
               onClose={toggleModal}
+              owner={user.id}
               userGroups={groups}
               userTags={tags}
             />

@@ -3,9 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchTags = createAsyncThunk(
   'tags/fetchTags',
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const response = await axios.get('/tags');
+      const response = await axios.get(`/tags?owner=${userId}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

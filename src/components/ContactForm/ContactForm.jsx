@@ -1,266 +1,301 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from 'utils/fireStore';
+import * as Yup from 'yup';
+import { Notify } from 'notiflix';
 import { useAuth } from 'hooks/useAuth';
-import { addContact, updateContact } from 'redux/operations';
-import { selectContacts } from 'redux/contacts/selectors';
-
+import { addContact } from 'redux/contacts/operations';
+import CustomSelect from 'components/CustomSelect/CustomSelect';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import DeleteIcon from '@mui/icons-material/Delete';
 import css from './ContactForm.module.css';
 
-export default function ContactForm({ onClose, contact = {}, userGroups, userTags }) {
-  const [firstName, setFirstName] = useState(
-    contact.id ? contact.firstName : ''
-  );
-  const [middleName, setMiddleName] = useState(() =>
-    contact.id ? contact.middleName : ''
-  );
-  const [lastName, setLastName] = useState(contact.id ? contact.lastName : '');
-  const [jobTitle, setJobTitle] = useState(contact.id ? contact.jobTitle : '');
-  const [company, setCompany] = useState(contact.id ? contact.company : '');
-  const [phone, setPhone] = useState(contact.id ? contact.phone : '');
-  const [email, setEmail] = useState(contact.id ? contact.email : '');
-  const [birthday, setBirthday] = useState(contact.id ? contact.birthday : '');
-  const [note, setNote] = useState(contact.id ? contact.note : '');
-  const [groups, setGroups] = useState(contact.id ? [...contact.groups] : []);
-  const [tags, setTags] = useState(contact.id ? [...contact.tags] : [])
+const validationSchema = Yup.object().shape({
+  avatar: Yup.string(),
+  firstName: Yup.string().required("* it's a required field"),
+  middleName: Yup.string(),
+  lastName: Yup.string().required("* it's a required field"),
+  jobTitle: Yup.string(),
+  company: Yup.string(),
+  phone: Yup.string().required("* it's a required field"),
+  email: Yup.string(),
+  birthday: Yup.string(),
+  note: Yup.string(),
+  groups: Yup.array().default([]),
+  tags: Yup.array().default([]),
+});
 
-  const { user } = useAuth();
-  const contacts = useSelector(selectContacts);
+const initialValues = {
+  avatar: '',
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  jobTitle: '',
+  company: '',
+  phone: '',
+  email: '',
+  birthday: '',
+  note: '',
+  groups: [],
+  tags: [],
+};
+
+export default function ContactForm({
+  onClose,
+  owner,
+  contact = {},
+  userGroups,
+  userTags,
+}) {
+  const [avatarURL, setAvatarURL] = useState('');
+  const [fileName, setFileName] = useState('');
   const dispatch = useDispatch();
+  const { user } = useAuth();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
+  const handleFiles = e => {
+    const selectedFile = e.target.files[0];
 
-    switch (name) {
-      case 'firstName':
-        setFirstName(value);
-        break;
+    if (selectedFile.size < 10000000) {
+      const name = selectedFile.name;
+      const storageRef = ref(storage, `avatars/${owner}/${name}`);
+      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
-      case 'middleName':
-        setMiddleName(value);
-        break;
-
-      case 'lastName':
-        setLastName(value);
-        break;
-
-      case 'jobTitle':
-        setJobTitle(value);
-        break;
-
-      case 'company':
-        setCompany(value);
-        break;
-
-      case 'phone':
-        setPhone(value);
-        break;
-
-      case 'email':
-        setEmail(value);
-        break;
-
-      case 'birthday':
-        setBirthday(value);
-        break;
-
-      case 'note':
-        setNote(value);
-        break;
-
-      default:
-        return;
+      uploadTask.on(
+        'state_changed',
+        snapshot => {},
+        error => {
+          console.log(error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(url => {
+            setAvatarURL(url);
+            setFileName(name);
+          });
+        }
+      );
+    } else {
+      Notify.failure(
+        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
+      );
     }
   };
-
-  const handleSubmit = e => {
-    e.preventDefault(e);
-    contact.id ? changeContact() : createContact();
-    reset();
+  const handleSubmit = (values, { resetForm }) => {
+    const newContact = { ...values, avatar: avatarURL, owner: user.id };
+    dispatch(addContact(newContact));
+    resetForm();
     onClose();
   };
 
-  const changeContact = () => {
-    const updatedContact = {
-      firstName: firstName,
-      middleName: middleName,
-      lastName: lastName,
-      jobTitle: jobTitle,
-      company: company,
-      phone: phone,
-      email: email,
-      birthday: birthday,
-      createdAt: contact.createdAt,
-      groups: contact.groups,
-      tags: contact.tags,
-      note: contact.note,
-      owner: contact.owner,
-      avatar: contact.avatar,
-      id: contact.id,
-    };
-
-    dispatch(updateContact({ ...updatedContact }));
-  };
-
-  const createContact = () => {
-    const newContact = {
-      firstName: firstName,
-      middleName: middleName,
-      lastName: lastName,
-      jobTitle: jobTitle,
-      company: company,
-      phone: phone,
-      email: email,
-      birthday: birthday,
-      createdAt: Date.now(),
-      groups: [],
-      tags: [],
-      note: '',
-      owner: user.id,
-    };
-    const isExist = contacts.find(
-      contact =>
-        contact.phone.trim().toLowerCase() === phone.trim().toLowerCase()
-    );
-
-    if (isExist) {
-      alert(`${phone} is already in contacts`);
-      return;
-    }
-
-    dispatch(addContact(newContact));
-  };
-
-  const reset = () => {
-    setFirstName('');
-    setMiddleName('');
-    setLastName('');
-    setJobTitle('');
-    setCompany('');
-    setPhone('');
-    setEmail('');
-    setBirthday('');
-  };
-
   return (
-    <form className={css.contactForm} onSubmit={handleSubmit}>
-      <h3>{contact.id ? 'Update Contact' : 'Add New Contact'} </h3>
-      <label className={css.formLabel}>
-        First name
-        <input
-          className={css.formInput}
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={handleChange}
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Middle name
-        <input
-          className={css.formInput}
-          type="text"
-          name="middleName"
-          value={middleName}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Last name
-        <input
-          className={css.formInput}
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={handleChange}
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Job title
-        <input
-          className={css.formInput}
-          type="text"
-          name="jobTitle"
-          value={jobTitle}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Company
-        <input
-          className={css.formInput}
-          type="text"
-          name="company"
-          value={company}
-          onChange={handleChange}
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Phone
-        <input
-          className={css.formInput}
-          type="tel"
-          name="phone"
-          value={phone}
-          onChange={handleChange}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Email
-        <input
-          className={css.formInput}
-          type="email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Birthday
-        <input
-          className={css.formInput}
-          type="text"
-          name="birthday"
-          value={birthday}
-          onChange={handleChange}
-          required
-          autoComplete="off"
-        />
-      </label>
-      <label className={css.formLabel}>
-        Note
-        <input
-          className={css.formInput}
-          type="text"
-          name="note"
-          value={note}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-      </label>
-      <label>
-        <select name="groups" id="groups">
-          <option value="none" disabled>groups</option>
-
-        </select>
-      </label>
-
-      <button className={css.formBtn} type="submit">
-        {contact.id ? 'Update Contact' : 'Add contact'}
-      </button>
-    </form>
+    <div className={css.formWrapper}>
+      <div className={css.formHeader}>
+        <h3>Add New Contact</h3>
+      </div>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values }) => (
+          <Form
+            className={css.form}
+            name="addContactForm"
+            id="addContactForm"
+            autoComplete="off"
+          >
+            <fieldset
+              className={`${css.formField} ${css.avatarField}`}
+              form="addContactForm"
+              name="avatar"
+              role="group"
+            >
+              <label className={`${css.formLabel} ${css.avatarLabel}`}>
+                {avatarURL ? (
+                  <Avatar
+                    src={avatarURL}
+                    alt={fileName}
+                    className={css.avatarPreview}
+                  />
+                ) : (
+                  <AddPhotoAlternateIcon className={css.avatarIcon} />
+                )}
+                <Field
+                  className={`${css.formInput} ${css.visuallyHidden}`}
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleFiles}
+                />
+              </label>
+              <div>
+                {avatarURL && (
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    onClick={() => setAvatarURL('')}
+                  >
+                    Remove image
+                  </Button>
+                )}
+              </div>
+            </fieldset>
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="name"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="firstName"
+                  placeholder="First name"
+                />
+                <ErrorMessage name="firstName">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="middleName"
+                  placeholder="Middle name"
+                />
+                <ErrorMessage name="middleName">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="lastName"
+                  placeholder="Last name"
+                />
+                <ErrorMessage name="lastName">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+            </fieldset>
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="job"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="jobTitle"
+                  placeholder="Position"
+                />
+                <ErrorMessage name="jobTitle">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="company"
+                  placeholder="Company name"
+                />
+                <ErrorMessage name="company">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+            </fieldset>
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="contacts"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="phone"
+                  placeholder="Phone"
+                />
+                <ErrorMessage name="phone">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="email"
+                  placeholder="Email"
+                />
+                <ErrorMessage name="email">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+            </fieldset>
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="attributes-1"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field className={css.formInput} type="date" name="birthday" />
+                <ErrorMessage name="birthday">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  as="textarea"
+                  name="note"
+                  placeholder="Note"
+                  rows={7}
+                />
+                <ErrorMessage name="note">
+                  {message => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+            </fieldset>
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="attributes-2"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  name="groups"
+                  component={CustomSelect}
+                  placeholder="Select group..."
+                  valuesList={userGroups}
+                />
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  name="tags"
+                  component={CustomSelect}
+                  placeholder="Select tag..."
+                  valuesList={userTags}
+                />
+              </label>
+            </fieldset>
+            <button className={css.formBtn} type="submit">
+              {contact.id ? 'Update Contact' : 'Add contact'}
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 }

@@ -21,11 +21,12 @@ export default function ContactListItem({
   linkBtn,
 }) {
   const [targetBtn, setTargetBtn] = useState('');
-  const { ref, onOpen, onClose } = useModal();
+  const { isModalOpen, toggleModal } = useModal();
 
   const showContact = e => {
     setTargetBtn(e.currentTarget.name);
-    onOpen();
+    toggleModal();
+    // onOpen();
   };
 
   return (
@@ -70,21 +71,22 @@ export default function ContactListItem({
           </li>
         )}
       </ul>
+      {isModalOpen && (
+        <Modal onClose={toggleModal}>
+          <div className={css.modalContentWrapper}>
+            <p>{`${firstName} ${middleName} ${lastName}`}</p>
+            <div className={css.contactDetails}>
+              {targetBtn === 'phone' ? (
+                <PhoneEnabledSharpIcon />
+              ) : (
+                <EmailSharpIcon />
+              )}
 
-      <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
-        <div className={css.modalContentWrapper}>
-          <p>{`${firstName} ${middleName} ${lastName}`}</p>
-          <div className={css.contactDetails}>
-            {targetBtn === 'phone' ? (
-              <PhoneEnabledSharpIcon />
-            ) : (
-              <EmailSharpIcon />
-            )}
-
-            {targetBtn === 'phone' ? <p>{phone}</p> : <p>{email}</p>}
+              {targetBtn === 'phone' ? <p>{phone}</p> : <p>{email}</p>}
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </li>
   );
 }

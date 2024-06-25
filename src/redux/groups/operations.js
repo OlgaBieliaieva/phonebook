@@ -3,9 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchGroups = createAsyncThunk(
   'groups/fetchGroups',
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const response = await axios.get('/groups');
+      const response = await axios.get(`/groups?owner=${userId}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

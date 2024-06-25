@@ -19,11 +19,7 @@ import css from './Contact.module.css';
 export default function Contact({ contact }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { ref, onOpen, onClose } = useModal();
-
-  function handleEdit() {
-    onOpen();
-  }
+  const { isModalOpen, toggleModal } = useModal();
 
   function handleDelete(id) {
     dispatch(deleteContact(id));
@@ -41,7 +37,7 @@ export default function Contact({ contact }) {
                   type="button"
                   name="edit"
                   className={css.toolsBtn}
-                  onClick={handleEdit}
+                  onClick={toggleModal}
                 >
                   <EditSharpIcon className={css.btnIcon} />
                 </button>
@@ -113,9 +109,11 @@ export default function Contact({ contact }) {
           </li>
         </ul>
       </div>
-      <Modal ref={ref} onClose={onClose} onOpen={onOpen}>
-        <ContactForm onClose={onClose} contact={contact} />
-      </Modal>
+      {isModalOpen && (
+        <Modal onClose={toggleModal}>
+          <ContactForm onClose={toggleModal} contact={contact} />
+        </Modal>
+      )}
     </>
   );
 }
