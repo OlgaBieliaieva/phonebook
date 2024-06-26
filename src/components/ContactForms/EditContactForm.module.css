@@ -1,0 +1,120 @@
+.formWrapper {
+    padding-top: 64px;
+    padding-bottom: 24px;
+  }
+  .formHeader {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+  }
+  .form {
+    width: 100%;
+    height: calc(85vh - 64px - 24px - 48px);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    overflow-y: scroll;
+    overscroll-behavior-block: contain;
+  
+    @media screen and (min-width: 1024px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: start;
+      justify-content: center;
+    }
+  }
+  .formField {
+    width: 90%;
+    max-width: 512px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 16px;
+    
+    @media screen and (min-width: 1024px) {
+      flex-basis: calc((100% - 24px) / 2);
+    }
+  }
+  .formLabel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 500;
+  }
+  .formLabel:focus-visible {
+    outline: none;
+  }
+  .formInput {
+    width: 100%;
+    display: block;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    border: 1px solid #a8aab3;
+  }
+  .formInput:focus-visible{
+    outline: none;
+  }
+  .formBtn {
+    width: 150px;
+    margin: auto;
+    padding: 15px;
+    color: #ffffff;
+    background-color: rgb(130, 130, 250);
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+      0px 2px 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .formBtn:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+  .avatarField {
+    border: none;
+    height: 232px;
+  }
+  .avatarLabel {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(192, 192, 192);
+    border-radius: 50%;
+  }
+  .avatarPreview {
+    width: 100%;
+    height: 100%;
+  }
+  .avatarIcon {
+    width: 64px;
+    height: 64px;
+    fill: rgb(192, 192, 192);
+  }
+  .errorText {
+    color: #bb4430;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .visuallyHidden {
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    margin: -1px;
+  }
+  

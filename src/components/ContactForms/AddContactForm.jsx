@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from 'utils/fireStore';
 import * as Yup from 'yup';
@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import DeleteIcon from '@mui/icons-material/Delete';
-import css from './ContactForm.module.css';
+import css from './AddContactForm.module.css';
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.string(),
@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
   tags: Yup.array().default([]),
 });
 
-const initialValues = {
+let initialValues = {
   avatar: '',
   firstName: '',
   middleName: '',
@@ -44,7 +44,7 @@ const initialValues = {
   tags: [],
 };
 
-export default function ContactForm({
+export default function AddContactForm({
   onClose,
   owner,
   contact = {},
@@ -56,7 +56,7 @@ export default function ContactForm({
   const dispatch = useDispatch();
   const { user } = useAuth();
 
-  const handleFiles = e => {
+  const handleFiles = async e => {
     const selectedFile = e.target.files[0];
 
     if (selectedFile.size < 10000000) {

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { filter } from 'redux/contactBookAppSlice';
+import { filter } from 'redux/contacts/slice';
 import css from './Filter.module.css';
 
 export default function Filter() {

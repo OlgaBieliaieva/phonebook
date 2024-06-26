@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import useModal from 'hooks/useModal';
@@ -6,19 +6,19 @@ import { useAuth } from 'hooks/useAuth';
 import { fetchContacts } from 'redux/contacts/operations';
 import { fetchGroups } from 'redux/groups/operations';
 import { fetchTags } from 'redux/tags/operations';
-import { selectContacts } from 'redux/contacts/selectors';
+import { selectFilteredContacts } from 'redux/contacts/selectors';
 import { selectGroups } from 'redux/groups/selectors';
 import { selectTags } from 'redux/tags/selectors';
 import Modal from 'components/Modal/Modal';
 import PageHeader from 'components/PageHeader/PageHeader';
 import Filter from 'components/Filter/Filter';
 import ContactList from 'components/ContactList/ContactList';
-import ContactForm from 'components/ContactForm/ContactForm';
+import AddContactForm from 'components/ContactForms/AddContactForm';
 import InfoText from 'components/InfoText/InfoText';
 import css from './Contacts.module.css';
 
 export default function Contacts() {
-  const contacts = useSelector(selectContacts);
+  const contacts = useSelector(selectFilteredContacts);
   const groups = useSelector(selectGroups);
   const tags = useSelector(selectTags);
   const dispatch = useDispatch();
@@ -30,9 +30,8 @@ export default function Contacts() {
     dispatch(fetchContacts(user.id));
     dispatch(fetchGroups(user.id));
     dispatch(fetchTags(user.id));
-  }, [dispatch]);
+  }, [dispatch, user]);
 
-  
   return (
     <>
       <div className={css.contactsWrapper}>
@@ -52,7 +51,7 @@ export default function Contacts() {
         </div>
         {isModalOpen && (
           <Modal onClose={toggleModal}>
-            <ContactForm
+            <AddContactForm
               onClose={toggleModal}
               owner={user.id}
               userGroups={groups}

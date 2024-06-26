@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,13 +12,18 @@ export default function CustomSelect({
   form,  
   valuesList,
 }) {
-  const [groupName, setGroupName] = useState([]);
+  const [checked, setChecked] = useState([]);
 
+  useEffect(() => {
+   setChecked(field.value)
+  }, [field.value]);
+
+  
   const handleChange = event => {
     const {
       target: { value },
     } = event;
-    setGroupName(
+    setChecked(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value
     );
@@ -34,7 +39,7 @@ export default function CustomSelect({
       className={css.selectItem}
         id="multiple-chip"
         multiple
-        value={groupName}        
+        value={checked}        
         onChange={handleChange}
         input={<OutlinedInput id="select-multiple-chip" placeholder={placeholder} />}
         renderValue={selected => (

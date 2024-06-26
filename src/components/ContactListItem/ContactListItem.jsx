@@ -26,13 +26,16 @@ export default function ContactListItem({
   const showContact = e => {
     setTargetBtn(e.currentTarget.name);
     toggleModal();
-    // onOpen();
   };
 
   return (
     <li className={css.contactItem} key={id}>
       <Avatar>
-        <img src={avatar} alt={firstName} />
+        {avatar ? (
+          <img src={avatar} alt={firstName} />
+        ) : (
+          <span>{firstName.slice(0, 1)}</span>
+        )}
       </Avatar>
       <div className={css.descriptionWrapper}>
         <p

@@ -1,9 +1,16 @@
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { storage } from 'utils/fireStore';
+import { Notify, Confirm } from 'notiflix';
 import useModal from 'hooks/useModal';
-import { deleteContact } from 'redux/operations';
+import { useAuth } from 'hooks/useAuth';
+import { deleteContact, updateContact } from 'redux/contacts/operations';
 import Modal from 'components/Modal/Modal';
-import ContactForm from 'components/ContactForm/ContactForm';
+import EditContactForm from 'components/ContactForms/EditContactForm';
+import { Tooltip } from '@mui/material';
+import { Avatar } from '@mui/material';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import GroupSharpIcon from '@mui/icons-material/GroupSharp';
@@ -12,18 +19,63 @@ import PhoneEnabledSharpIcon from '@mui/icons-material/PhoneEnabledSharp';
 import EmailSharpIcon from '@mui/icons-material/EmailSharp';
 import CakeSharpIcon from '@mui/icons-material/CakeSharp';
 import SpeakerNotesSharpIcon from '@mui/icons-material/SpeakerNotesSharp';
-import { Tooltip } from '@mui/material';
-import { Avatar } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
 import css from './Contact.module.css';
 
-export default function Contact({ contact }) {
+export default function Contact({ contact, userGroups, userTags }) {
+  const [avatarURL, setAvatarURL] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
+  const { user } = useAuth();
 
   function handleDelete(id) {
-    dispatch(deleteContact(id));
-    navigate(-1);
+    const data = { userId: user.id, contactId: id };
+    Confirm.show(
+      'Delete Contact',
+      'Do you really want to delete this contact?',
+      'Yes',
+      'No',
+      function okCb() {
+        dispatch(deleteContact(data));
+        navigate(-1);
+      }
+    );
+  }
+
+  function handleUpdateAvatar(e) {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile.size < 10000000) {
+      const storageRef = ref(storage, `avatars/${user.id}/${contact.id}`);
+      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+
+      uploadTask.on(
+        'state_changed',
+        snapshot => {},
+        error => {
+          console.log(error.message);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(url => {
+            setAvatarURL(url);
+
+            const newContact = { ...contact, avatar: url };
+            dispatch(updateContact(newContact));
+            setAvatarURL('');
+          });
+        }
+      );
+    } else {
+      Notify.failure(
+        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
+      );
+    }
+  }
+  function handleDeleteAvatar() {
+    setAvatarURL('');
+    dispatch(updateContact({ ...contact, avatar: '' }));
   }
 
   return (
@@ -32,7 +84,7 @@ export default function Contact({ contact }) {
         <div className={css.mainInfoWrapper}>
           <ul className={css.toolsList}>
             <li>
-              <Tooltip>
+              <Tooltip title="edit">
                 <button
                   type="button"
                   name="edit"
@@ -44,7 +96,7 @@ export default function Contact({ contact }) {
               </Tooltip>
             </li>
             <li>
-              <Tooltip>
+              <Tooltip title="delete">
                 <button
                   type="button"
                   name="delete"
@@ -58,8 +110,47 @@ export default function Contact({ contact }) {
           </ul>
           <div className={css.mainInfo}>
             <Avatar className={css.avatar}>
-              <img src={contact.avatar} alt={contact.firstName} />
+              {contact.avatar || avatarURL ? (
+                <img
+                  src={avatarURL ? avatarURL : contact.avatar}
+                  alt={contact.firstName}
+                />
+              ) : (
+                <span>{`${contact.firstName.slice(
+                  0,
+                  1
+                )}${contact.lastName.slice(0, 1)}`}</span>
+              )}
             </Avatar>
+            {contact.avatar || avatarURL ? (
+              <Tooltip title="remove">
+                <button
+                  type="button"
+                  name="remove"
+                  className={`${css.toolsBtn} ${css.absolute}`}
+                  onClick={() => handleDeleteAvatar()}
+                >
+                  <DeleteForeverSharpIcon className={css.btnIcon} />
+                </button>
+              </Tooltip>
+            ) : (
+              <Tooltip title="add avatar">
+                <label
+                  type="button"
+                  name="delete"
+                  className={`${css.toolsBtn} ${css.absolute}`}
+                >
+                  <AddIcon className={css.btnIcon} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className={css.visuallyHidden}
+                    onChange={handleUpdateAvatar}
+                  ></input>
+                </label>
+              </Tooltip>
+            )}
+
             <p
               className={css.contactName}
             >{`${contact.firstName} ${contact.middleName} ${contact.lastName}`}</p>
@@ -111,7 +202,12 @@ export default function Contact({ contact }) {
       </div>
       {isModalOpen && (
         <Modal onClose={toggleModal}>
-          <ContactForm onClose={toggleModal} contact={contact} />
+          <EditContactForm
+            onClose={toggleModal}
+            contact={contact}
+            userGroups={userGroups}
+            userTags={userTags}
+          />
         </Modal>
       )}
     </>
