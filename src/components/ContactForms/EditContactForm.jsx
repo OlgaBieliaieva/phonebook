@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
 
 export default function EditContactForm({
   onClose,  
-  contact = {},
+  contact,
   userGroups,
   userTags,
 }) {

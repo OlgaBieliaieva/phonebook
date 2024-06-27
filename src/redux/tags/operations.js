@@ -38,7 +38,7 @@ export const updateTag = createAsyncThunk(
   'tags/updateTag',
   async (newTag, thunkAPI) => {
     try {
-      const response = await axios.put(`/tags/${newTag}`, {
+      const response = await axios.put(`/tags/${newTag.id}`, {
         ...newTag,
       });
       return response.data;

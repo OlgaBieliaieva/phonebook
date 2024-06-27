@@ -41,7 +41,7 @@ export const updateGroup = createAsyncThunk(
   'groups/updateGroup',
   async (newGroup, thunkAPI) => {
     try {
-      const response = await axios.put(`/groups/${newGroup}`, {
+      const response = await axios.put(`/groups/${newGroup.id}`, {
         ...newGroup,
       });
       return response.data;

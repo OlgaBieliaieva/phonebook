@@ -1,16 +1,28 @@
 import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
 import GroupsSharpIcon from '@mui/icons-material/GroupsSharp';
 import css from './GroupListItem.module.css';
 
-export default function GroupListItem({ group, contactsInGroup }) {
+export default function GroupListItem({ group }) {
   return (
     <li className={css.groupItem}>
-      <Link to={group} className={css.groupItemLink}>
+      <Link to={group.id} className={css.groupItemLink}>
         <div className={css.groupItemNameWrapper}>
-          <GroupsSharpIcon className={css.groupItemIcon} />
-          <p>{group}</p>
+          <Avatar>
+            {group.avatar ? (
+              <img src={group.avatar} alt={group.name} />
+            ) : (
+              <GroupsSharpIcon className={css.groupItemIcon} />
+            )}
+          </Avatar>
+          <div className={css.descriptionWrapper}>
+            <p className={css.groupName}>{group.name}</p>
+            <p className={css.groupDescription}>{group.description}</p>
+          </div>
         </div>
-        <p className={css.groupItemChip}>{contactsInGroup.length}</p>
+        <p className={css.groupItemChip}>
+          {group.members.length}
+        </p>
       </Link>
     </li>
   );

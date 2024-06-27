@@ -24,13 +24,10 @@ export default function SignupForm() {
     e.preventDefault();
     const form = e.currentTarget;
     const newUser = {
-      createdAt: Date.now(),
       name: form.elements.name.value,
       email: form.elements.email.value,
       password: form.elements.password.value,
       avatar: form.elements.name.value.slice(0, 1),
-      groups: [],
-      tags: [],
     };
 
     dispatch(register({ ...newUser }));
@@ -65,7 +62,7 @@ export default function SignupForm() {
             Sign up
           </Typography>
           <Box
-            component="form"            
+            component="form"
             autoComplete="off"
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}

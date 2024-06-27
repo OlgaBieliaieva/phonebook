@@ -23,6 +23,39 @@
   height: 40px;
   fill: #a0a4ac;
 }
+.descriptionWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.groupName {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 18px;
+  }
+}
+.groupDescription {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: #a0a4ac;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
+  }
+}
 .groupItemChip {
   padding: 8px 16px;
   border-radius: 16px;

@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from 'utils/fireStore';
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
+import { storage } from 'utils/firebaseConfig';
 import { Notify, Confirm } from 'notiflix';
 import useModal from 'hooks/useModal';
 import { useAuth } from 'hooks/useAuth';
 import { deleteContact, updateContact } from 'redux/contacts/operations';
+import { updateGroup } from 'redux/groups/operations';
+import { updateTag } from 'redux/tags/operations';
 import Modal from 'components/Modal/Modal';
 import EditContactForm from 'components/ContactForms/EditContactForm';
-import { Tooltip } from '@mui/material';
-import { Avatar } from '@mui/material';
+import { Tooltip, Avatar } from '@mui/material';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
 import GroupSharpIcon from '@mui/icons-material/GroupSharp';
@@ -25,29 +31,23 @@ import css from './Contact.module.css';
 
 export default function Contact({ contact, userGroups, userTags }) {
   const [avatarURL, setAvatarURL] = useState('');
+  const [fileName, setFileName] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
-
-  function handleDelete(id) {
-    const data = { userId: user.id, contactId: id };
-    Confirm.show(
-      'Delete Contact',
-      'Do you really want to delete this contact?',
-      'Yes',
-      'No',
-      function okCb() {
-        dispatch(deleteContact(data));
-        navigate(-1);
-      }
-    );
-  }
+  const formattedGroups = contact.groups.map(
+    groupId => userGroups.find(group => group.id === groupId).name
+  );
+  const formattedTags = contact.tags.map(
+    tagId => userTags.find(tag => tag.id === tagId).name
+  );
 
   function handleUpdateAvatar(e) {
     const selectedFile = e.target.files[0];
 
     if (selectedFile.size < 10000000) {
+      const name = selectedFile.name;
       const storageRef = ref(storage, `avatars/${user.id}/${contact.id}`);
       const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
@@ -60,10 +60,15 @@ export default function Contact({ contact, userGroups, userTags }) {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then(url => {
             setAvatarURL(url);
+            setFileName(name);
 
-            const newContact = { ...contact, avatar: url };
+            const newContact = {
+              ...contact,
+              avatar: { url: url, name: name },
+            };
             dispatch(updateContact(newContact));
             setAvatarURL('');
+            setFileName('');
           });
         }
       );
@@ -74,8 +79,66 @@ export default function Contact({ contact, userGroups, userTags }) {
     }
   }
   function handleDeleteAvatar() {
+    // add function for delete image from storage
+    // console.log(contact.avatar.split('/'));
+    const storageRef = ref(
+      storage,
+      `avatars/${user.id}/${contact.avatar.name}`
+    );
+    deleteObject(storageRef);
     setAvatarURL('');
-    dispatch(updateContact({ ...contact, avatar: '' }));
+    setFileName('');
+    dispatch(updateContact({ ...contact, avatar: { url: '', name: '' } }));
+  }
+
+  function handleDelete(id) {
+    const data = { userId: user.id, contactId: id };
+    Confirm.show(
+      'Delete Contact',
+      'Do you really want to delete this contact?',
+      'Yes',
+      'No',
+      function okCb() {
+        dispatch(deleteContact(data));
+        navigate(-1);
+        removeFromMembers(contact);
+      }
+    );
+  }
+
+  function removeFromMembers(deletedContact) {
+    if (deletedContact.groups.length > 0) {
+      return deletedContact.groups
+        .map(groupId => userGroups.find(group => group.id === groupId))
+        .map(targetGroup => {
+          const targetGroupMembers = [...targetGroup.members];
+          const index = targetGroupMembers.indexOf(deletedContact.id);
+          targetGroupMembers.splice(index, 1);
+
+          return dispatch(
+            updateGroup({
+              id: targetGroup.id,
+              members: [...targetGroupMembers],
+            })
+          );
+        });
+    }
+    if (deletedContact.tags.length > 0) {
+      return deletedContact.tags
+        .map(tagId => userTags.find(tag => tag.id === tagId))
+        .map(targetTag => {
+          const targetTagMembers = [...targetTag.members];
+          const index = targetTagMembers.indexOf(deletedContact.id);
+          targetTagMembers.splice(index, 1);
+
+          return dispatch(
+            updateTag({
+              id: targetTag.id,
+              members: [...targetTagMembers],
+            })
+          );
+        });
+    }
   }
 
   return (
@@ -110,9 +173,9 @@ export default function Contact({ contact, userGroups, userTags }) {
           </ul>
           <div className={css.mainInfo}>
             <Avatar className={css.avatar}>
-              {contact.avatar || avatarURL ? (
+              {contact.avatar.url || avatarURL ? (
                 <img
-                  src={avatarURL ? avatarURL : contact.avatar}
+                  src={avatarURL ? avatarURL : contact.avatar.url}
                   alt={contact.firstName}
                 />
               ) : (
@@ -122,7 +185,7 @@ export default function Contact({ contact, userGroups, userTags }) {
                 )}${contact.lastName.slice(0, 1)}`}</span>
               )}
             </Avatar>
-            {contact.avatar || avatarURL ? (
+            {contact.avatar.url || avatarURL ? (
               <Tooltip title="remove">
                 <button
                   type="button"
@@ -162,21 +225,27 @@ export default function Contact({ contact, userGroups, userTags }) {
             <li className={css.contactAttribute}>
               <GroupSharpIcon />
               <ul className={css.contactAttributeItemsList}>
-                {contact.groups.map((group, index) => (
-                  <li key={index} className={css.contactAttributeItem}>
-                    {group}
-                  </li>
-                ))}
+                {userGroups.map(
+                  (group, index) =>
+                    group.members.includes(contact.id) && (
+                      <li key={index} className={css.contactAttributeItem}>
+                        {group.name}
+                      </li>
+                    )
+                )}
               </ul>
             </li>
             <li className={css.contactAttribute}>
               <TagSharpIcon />
               <ul className={css.contactAttributeItemsList}>
-                {contact.tags.map((tag, index) => (
-                  <li key={index} className={css.contactAttributeItem}>
-                    {tag}
-                  </li>
-                ))}
+                {userTags.map(
+                  (tag, index) =>
+                    tag.members.includes(contact.id) && (
+                      <li key={index} className={css.contactAttributeItem}>
+                        {tag.name}
+                      </li>
+                    )
+                )}
               </ul>
             </li>
           </ul>
@@ -204,7 +273,11 @@ export default function Contact({ contact, userGroups, userTags }) {
         <Modal onClose={toggleModal}>
           <EditContactForm
             onClose={toggleModal}
-            contact={contact}
+            contact={{
+              ...contact,
+              groups: [...formattedGroups],
+              tags: [...formattedTags],
+            }}
             userGroups={userGroups}
             userTags={userTags}
           />

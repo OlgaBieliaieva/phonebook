@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from 'utils/fireStore';
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
+import { storage } from 'utils/firebaseConfig';
 import * as Yup from 'yup';
 import { Notify } from 'notiflix';
 import { useAuth } from 'hooks/useAuth';
 import { addContact } from 'redux/contacts/operations';
+import { updateGroup } from 'redux/groups/operations';
+import { updateTag } from 'redux/tags/operations';
+import removeFileFromStorage from 'utils/removeFileFromStorage';
 import CustomSelect from 'components/CustomSelect/CustomSelect';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -44,51 +52,76 @@ let initialValues = {
   tags: [],
 };
 
-export default function AddContactForm({
-  onClose,
-  owner,
-  contact = {},
-  userGroups,
-  userTags,
-}) {
+export default function AddContactForm({ onClose, userGroups, userTags }) {
   const [avatarURL, setAvatarURL] = useState('');
   const [fileName, setFileName] = useState('');
   const dispatch = useDispatch();
   const { user } = useAuth();
 
-  const handleFiles = async e => {
-    const selectedFile = e.target.files[0];
+  async function addAvatar(e) {
+    const { url, name } = addFileToStorage(e, 'contactAvatars', user.id);
+    setAvatarURL(url);
+    setFileName(name);
+  }
 
-    if (selectedFile.size < 10000000) {
-      const name = selectedFile.name;
-      const storageRef = ref(storage, `avatars/${owner}/${name}`);
-      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+  function deleteAvatar() {
+    removeFileFromStorage('contactAvatars', user.id, fileName);
+    setAvatarURL('');
+    setFileName('');
+  }
 
-      uploadTask.on(
-        'state_changed',
-        snapshot => {},
-        error => {
-          console.log(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(url => {
-            setAvatarURL(url);
-            setFileName(name);
-          });
-        }
-      );
-    } else {
-      Notify.failure(
-        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
-      );
-    }
-  };
-  const handleSubmit = (values, { resetForm }) => {
-    const newContact = { ...values, avatar: avatarURL, owner: user.id };
-    dispatch(addContact(newContact));
+  async function handleSubmit(values, { resetForm }) {
+    const selectedGroups = values.groups.map(
+      selectedValue => userGroups.find(group => group.name === selectedValue).id
+    );
+    const selectedTags = values.tags.map(
+      selectedValue => userTags.find(tag => tag.name === selectedValue).id
+    );
+
+    const newContact = {
+      ...values,
+      avatar: {
+        url: avatarURL,
+        name: fileName,
+      },
+      owner: user.id,
+      groups: selectedGroups,
+      tags: selectedTags,
+    };
+
+    await dispatch(addContact(newContact))
+      .then(result => updateContactAttributes(result.payload))
+      .catch(err => console.log(err));
     resetForm();
     onClose();
-  };
+  }
+
+  function updateContactAttributes(createdContact) {
+    if (createdContact.groups.length > 0) {
+      return createdContact.groups
+        .map(groupId => userGroups.find(group => group.id === groupId))
+        .map(targetGroup =>
+          dispatch(
+            updateGroup({
+              id: targetGroup.id,
+              members: [...targetGroup.members, createdContact.id],
+            })
+          )
+        );
+    }
+    if (createdContact.tags.length > 0) {
+      return createdContact.tags
+        .map(tagId => userTags.find(tag => tag.id === tagId))
+        .map(targetTag =>
+          dispatch(
+            updateTag({
+              id: targetTag.id,
+              members: [...targetTag.members, createdContact.id],
+            })
+          )
+        );
+    }
+  }
 
   return (
     <div className={css.formWrapper}>
@@ -128,15 +161,12 @@ export default function AddContactForm({
                   type="file"
                   name="avatar"
                   accept="image/*"
-                  onChange={handleFiles}
+                  onChange={addAvatar}
                 />
               </label>
               <div>
                 {avatarURL && (
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    onClick={() => setAvatarURL('')}
-                  >
+                  <Button startIcon={<DeleteIcon />} onClick={deleteAvatar}>
                     Remove image
                   </Button>
                 )}
@@ -291,7 +321,7 @@ export default function AddContactForm({
               </label>
             </fieldset>
             <button className={css.formBtn} type="submit">
-              {contact.id ? 'Update Contact' : 'Add contact'}
+              Add contact
             </button>
           </Form>
         )}

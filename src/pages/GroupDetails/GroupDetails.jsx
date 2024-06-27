@@ -1,32 +1,34 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { selectFilteredContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/contacts/selectors';
+import { selectGroups } from 'redux/groups/selectors';
 import PageHeader from 'components/PageHeader/PageHeader';
 import ContactList from 'components/ContactList/ContactList';
 
 export default function GroupDetails() {
-  const contacts = useSelector(selectFilteredContacts);
+  const contacts = useSelector(selectContacts);
+  const groups = useSelector(selectGroups);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const targetGroupId =
+    location.pathname.split('/')[location.pathname.split('/').length - 1];
 
   function goBack() {
     navigate(-1);
   }
+
   return (
     <div>
       <PageHeader
-        title={
-          location.pathname.split('/')[location.pathname.split('/').length - 1]
-        }
         btnTitle="<<-Back"
         btnAction={goBack}
+        title={groups.find(group => group.id === targetGroupId).name}
       />
       <ContactList
         contacts={contacts.filter(contact =>
           contact.groups.includes(
-            location.pathname.split('/')[
-              location.pathname.split('/').length - 1
-            ]
+            groups.find(group => group.id === targetGroupId).name
           )
         )}
         linkBtn={false}

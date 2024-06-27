@@ -1,14 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { filter } from 'redux/contacts/slice';
+
 import css from './Filter.module.css';
 
-export default function Filter() {
-  const dispatch = useDispatch();
-
-  const handleFilterChange = e => {
-    const { value } = e.target;
-    dispatch(filter(value));
-  };
+export default function Filter({handleFilterChange}) {
+  
 
   return (
     <label className={css.formLabel}>

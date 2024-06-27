@@ -31,8 +31,8 @@ export default function ContactListItem({
   return (
     <li className={css.contactItem} key={id}>
       <Avatar>
-        {avatar ? (
-          <img src={avatar} alt={firstName} />
+        {avatar.url ? (
+          <img src={avatar.url} alt={firstName} />
         ) : (
           <span>{firstName.slice(0, 1)}</span>
         )}

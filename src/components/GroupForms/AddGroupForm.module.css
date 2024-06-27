@@ -26,17 +26,14 @@
   }
 }
 .formField {
-  width: 256px;
+  width: 90%;
+  max-width: 512px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   padding: 16px;
   border-radius: 16px;
-
-  @media screen and (min-width: 768px) {
-    width: 512px;
-  }
 
   @media screen and (min-width: 1024px) {
     flex-basis: calc((100% - 24px) / 2);
@@ -81,9 +78,42 @@
   transform: scale(1.1);
   cursor: pointer;
 }
-
+.avatarField {
+  border: none;
+  height: 232px;
+}
+.avatarLabel {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(192, 192, 192);
+  border-radius: 50%;
+}
+.avatarPreview {
+  width: 100%;
+  height: 100%;
+}
+.avatarIcon {
+  width: 64px;
+  height: 64px;
+  fill: rgb(192, 192, 192);
+}
 .errorText {
   color: #bb4430;
   font-size: 14px;
   font-weight: 500;
+}
+.visuallyHidden {
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  margin: -1px;
 }
