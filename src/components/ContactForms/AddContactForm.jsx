@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-  deleteObject,
+  // deleteObject,
 } from "firebase/storage";
 import { storage } from "../../utils/firebaseConfig";
 import * as Yup from "yup";
@@ -14,7 +14,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { addContact } from "../../redux/contacts/operations";
 import { updateGroup } from "../../redux/groups/operations";
 import { updateTag } from "../../redux/tags/operations";
-import addFileToStorage from "../../utils/addFileTostorage";
+// import addFileToStorage from "../../utils/addFileTostorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";

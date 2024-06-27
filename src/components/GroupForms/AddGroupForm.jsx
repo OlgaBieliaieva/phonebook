@@ -79,7 +79,7 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
       members: selectedMembers,
     };
     console.log(newGroup);
-    const result = dispatch(addGroup(newGroup));
+    dispatch(addGroup(newGroup));
     // console.log(result);
     // result.then(data=> addGroups).catch(err=> console.log(err))
   };

@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-  deleteObject,
+  // deleteObject,
 } from "firebase/storage";
 import { storage } from "../../utils/firebaseConfig";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
@@ -32,7 +32,7 @@ import css from "./Contact.module.css";
 
 export default function Contact({ contact, userGroups, userTags }) {
   const [avatarURL, setAvatarURL] = useState("");
-  const [fileName, setFileName] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
@@ -56,7 +56,7 @@ export default function Contact({ contact, userGroups, userTags }) {
       uploadBytesResumable(storageRef, selectedFile).then((snapshot) =>
         getDownloadURL(snapshot.ref).then((url) => {
           setAvatarURL(url);
-          setFileName(name);
+
           dispatch(
             updateContact({ ...contact, avatar: { url: url, name: name } })
           );
@@ -78,7 +78,7 @@ export default function Contact({ contact, userGroups, userTags }) {
     // deleteObject(storageRef);
     removeFileFromStorage("contactAvatars", user.id, contact.avatar.name);
     setAvatarURL("");
-    setFileName("");
+
     dispatch(updateContact({ ...contact, avatar: { url: "", name: "" } }));
   }
 

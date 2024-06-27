@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { selectContacts } from "../../redux/contacts/selectors";
 import { selectGroups } from "../../redux/groups/selectors";
