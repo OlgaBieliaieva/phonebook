@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import useModal from 'hooks/useModal';
-import Modal from 'components/Modal/Modal';
-import { Avatar } from '@mui/material';
-import PhoneEnabledSharpIcon from '@mui/icons-material/PhoneEnabledSharp';
-import EmailSharpIcon from '@mui/icons-material/EmailSharp';
-import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
-import css from './ContactListItem.module.css';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import useModal from "../../hooks/useModal";
+import Modal from "../Modal/Modal";
+import { Avatar } from "@mui/material";
+import PhoneEnabledSharpIcon from "@mui/icons-material/PhoneEnabledSharp";
+import EmailSharpIcon from "@mui/icons-material/EmailSharp";
+import VisibilitySharpIcon from "@mui/icons-material/VisibilitySharp";
+import css from "./ContactListItem.module.css";
 
 export default function ContactListItem({
   id,
@@ -20,10 +20,10 @@ export default function ContactListItem({
   email,
   linkBtn,
 }) {
-  const [targetBtn, setTargetBtn] = useState('');
+  const [targetBtn, setTargetBtn] = useState("");
   const { isModalOpen, toggleModal } = useModal();
 
-  const showContact = e => {
+  const showContact = (e) => {
     setTargetBtn(e.currentTarget.name);
     toggleModal();
   };
@@ -79,13 +79,13 @@ export default function ContactListItem({
           <div className={css.modalContentWrapper}>
             <p>{`${firstName} ${middleName} ${lastName}`}</p>
             <div className={css.contactDetails}>
-              {targetBtn === 'phone' ? (
+              {targetBtn === "phone" ? (
                 <PhoneEnabledSharpIcon />
               ) : (
                 <EmailSharpIcon />
               )}
 
-              {targetBtn === 'phone' ? <p>{phone}</p> : <p>{email}</p>}
+              {targetBtn === "phone" ? <p>{phone}</p> : <p>{email}</p>}
             </div>
           </div>
         </Modal>

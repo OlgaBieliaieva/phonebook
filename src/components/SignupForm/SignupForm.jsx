@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { register } from 'redux/auth/operations';
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register } from "../../redux/auth/operations";
 // MUI
 import {
   Avatar,
@@ -12,15 +12,15 @@ import {
   Typography,
   createTheme,
   ThemeProvider,
-} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const defaultTheme = createTheme();
 
 export default function SignupForm() {
   const dispatch = useDispatch();
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const newUser = {
@@ -37,12 +37,12 @@ export default function SignupForm() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid
-        component={'section'}
+        component={"section"}
         container
         sx={{
-          width: '100%',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          width: "100%",
+          justifyContent: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
         }}
       >
         <CssBaseline />
@@ -50,12 +50,12 @@ export default function SignupForm() {
           sx={{
             my: 4,
             mx: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

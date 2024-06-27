@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from 'utils/firebaseConfig';
-import * as Yup from 'yup';
-import { Notify } from 'notiflix';
-import { useAuth } from 'hooks/useAuth';
-import { addGroup } from 'redux/groups/operations';
-import CustomSelect from 'components/CustomSelect/CustomSelect';
-import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import DeleteIcon from '@mui/icons-material/Delete';
-import css from './AddGroupForm.module.css';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../utils/firebaseConfig";
+import * as Yup from "yup";
+import { Notify } from "notiflix";
+import { useAuth } from "../../hooks/useAuth";
+import { addGroup } from "../../redux/groups/operations";
+import CustomSelect from "../CustomSelect/CustomSelect";
+import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import DeleteIcon from "@mui/icons-material/Delete";
+import css from "./AddGroupForm.module.css";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.string(),
@@ -22,19 +22,19 @@ const validationSchema = Yup.object().shape({
 });
 
 let initialValues = {
-  avatar: '',
-  name: '',
-  description: '',
+  avatar: "",
+  name: "",
+  description: "",
   members: [],
 };
 
 export default function AddGroupForm({ onClose, owner, contacts }) {
-  const [avatarURL, setAvatarURL] = useState('');
-  const [fileName, setFileName] = useState('');
+  const [avatarURL, setAvatarURL] = useState("");
+  const [fileName, setFileName] = useState("");
   const dispatch = useDispatch();
   const { user } = useAuth();
 
-  const handleFiles = async e => {
+  const handleFiles = async (e) => {
     const selectedFile = e.target.files[0];
 
     if (selectedFile.size < 10000000) {
@@ -43,13 +43,13 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
       const uploadTask = uploadBytesResumable(storageRef, selectedFile);
 
       uploadTask.on(
-        'state_changed',
-        snapshot => {},
-        error => {
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
           console.log(error.message);
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             setAvatarURL(url);
             setFileName(name);
           });
@@ -65,11 +65,11 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
   const handleSubmit = (values, { resetForm }) => {
     console.log(values);
     const selectedMembers = values.members.map(
-      member =>
+      (member) =>
         contacts.find(
-          contact =>
-            contact.firstName === member.split(' ')[0] &&
-            contact.lastName === member.split(' ')[1]
+          (contact) =>
+            contact.firstName === member.split(" ")[0] &&
+            contact.lastName === member.split(" ")[1]
         ).id
     );
     const newGroup = {
@@ -82,7 +82,6 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
     const result = dispatch(addGroup(newGroup));
     // console.log(result);
     // result.then(data=> addGroups).catch(err=> console.log(err))
-
   };
 
   return (
@@ -130,7 +129,7 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
                 {avatarURL && (
                   <Button
                     startIcon={<DeleteIcon />}
-                    onClick={() => setAvatarURL('')}
+                    onClick={() => setAvatarURL("")}
                   >
                     Remove image
                   </Button>
@@ -151,7 +150,7 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
                   placeholder="Name"
                 />
                 <ErrorMessage name="name">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -162,7 +161,7 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
                   placeholder="Description"
                 />
                 <ErrorMessage name="description">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>

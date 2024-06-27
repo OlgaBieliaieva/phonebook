@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { updateContact } from 'redux/contacts/operations';
-import CustomSelect from 'components/CustomSelect/CustomSelect';
-import css from './AddContactForm.module.css';
+import { useDispatch } from "react-redux";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { updateContact } from "../../redux/contacts/operations";
+import CustomSelect from "../CustomSelect/CustomSelect";
+import css from "./AddContactForm.module.css";
 
 const validationSchema = Yup.object().shape({
   avatar: Yup.string(),
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function EditContactForm({
-  onClose,  
+  onClose,
   contact,
   userGroups,
   userTags,
@@ -66,7 +66,7 @@ export default function EditContactForm({
                   placeholder="First name"
                 />
                 <ErrorMessage name="firstName">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -77,7 +77,7 @@ export default function EditContactForm({
                   placeholder="Middle name"
                 />
                 <ErrorMessage name="middleName">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -88,7 +88,7 @@ export default function EditContactForm({
                   placeholder="Last name"
                 />
                 <ErrorMessage name="lastName">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
             </fieldset>
@@ -106,7 +106,7 @@ export default function EditContactForm({
                   placeholder="Position"
                 />
                 <ErrorMessage name="jobTitle">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -117,7 +117,7 @@ export default function EditContactForm({
                   placeholder="Company name"
                 />
                 <ErrorMessage name="company">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
             </fieldset>
@@ -135,7 +135,7 @@ export default function EditContactForm({
                   placeholder="Phone"
                 />
                 <ErrorMessage name="phone">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -146,7 +146,7 @@ export default function EditContactForm({
                   placeholder="Email"
                 />
                 <ErrorMessage name="email">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
             </fieldset>
@@ -159,7 +159,7 @@ export default function EditContactForm({
               <label className={css.formLabel}>
                 <Field className={css.formInput} type="date" name="birthday" />
                 <ErrorMessage name="birthday">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
               <label className={css.formLabel}>
@@ -171,7 +171,7 @@ export default function EditContactForm({
                   rows={7}
                 />
                 <ErrorMessage name="note">
-                  {message => <p className={css.errorText}>{message}</p>}
+                  {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
             </fieldset>

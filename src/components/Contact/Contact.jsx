@@ -1,46 +1,47 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
   deleteObject,
-} from 'firebase/storage';
-import { storage } from 'utils/firebaseConfig';
-import { Notify, Confirm } from 'notiflix';
-import useModal from 'hooks/useModal';
-import { useAuth } from 'hooks/useAuth';
-import { deleteContact, updateContact } from 'redux/contacts/operations';
-import { updateGroup } from 'redux/groups/operations';
-import { updateTag } from 'redux/tags/operations';
-import Modal from 'components/Modal/Modal';
-import EditContactForm from 'components/ContactForms/EditContactForm';
-import { Tooltip, Avatar } from '@mui/material';
-import EditSharpIcon from '@mui/icons-material/EditSharp';
-import DeleteForeverSharpIcon from '@mui/icons-material/DeleteForeverSharp';
-import GroupSharpIcon from '@mui/icons-material/GroupSharp';
-import TagSharpIcon from '@mui/icons-material/TagSharp';
-import PhoneEnabledSharpIcon from '@mui/icons-material/PhoneEnabledSharp';
-import EmailSharpIcon from '@mui/icons-material/EmailSharp';
-import CakeSharpIcon from '@mui/icons-material/CakeSharp';
-import SpeakerNotesSharpIcon from '@mui/icons-material/SpeakerNotesSharp';
-import AddIcon from '@mui/icons-material/Add';
+} from "firebase/storage";
+import { storage } from "../../utils/firebaseConfig";
+import removeFileFromStorage from "../../utils/removeFileFromStorage";
+import { Notify, Confirm } from "notiflix";
+import useModal from "../../hooks/useModal";
+import { useAuth } from "../../hooks/useAuth";
+import { deleteContact, updateContact } from "../../redux/contacts/operations";
+import { updateGroup } from "../../redux/groups/operations";
+import { updateTag } from "../../redux/tags/operations";
+import Modal from "../Modal/Modal";
+import EditContactForm from "../ContactForms/EditContactForm";
+import { Tooltip, Avatar } from "@mui/material";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
+import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
+import GroupSharpIcon from "@mui/icons-material/GroupSharp";
+import TagSharpIcon from "@mui/icons-material/TagSharp";
+import PhoneEnabledSharpIcon from "@mui/icons-material/PhoneEnabledSharp";
+import EmailSharpIcon from "@mui/icons-material/EmailSharp";
+import CakeSharpIcon from "@mui/icons-material/CakeSharp";
+import SpeakerNotesSharpIcon from "@mui/icons-material/SpeakerNotesSharp";
+import AddIcon from "@mui/icons-material/Add";
 
-import css from './Contact.module.css';
+import css from "./Contact.module.css";
 
 export default function Contact({ contact, userGroups, userTags }) {
-  const [avatarURL, setAvatarURL] = useState('');
-  const [fileName, setFileName] = useState('');
+  const [avatarURL, setAvatarURL] = useState("");
+  const [fileName, setFileName] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const formattedGroups = contact.groups.map(
-    groupId => userGroups.find(group => group.id === groupId).name
+    (groupId) => userGroups.find((group) => group.id === groupId).name
   );
   const formattedTags = contact.tags.map(
-    tagId => userTags.find(tag => tag.id === tagId).name
+    (tagId) => userTags.find((tag) => tag.id === tagId).name
   );
 
   function handleUpdateAvatar(e) {
@@ -48,29 +49,18 @@ export default function Contact({ contact, userGroups, userTags }) {
 
     if (selectedFile.size < 10000000) {
       const name = selectedFile.name;
-      const storageRef = ref(storage, `avatars/${user.id}/${contact.id}`);
-      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-
-      uploadTask.on(
-        'state_changed',
-        snapshot => {},
-        error => {
-          console.log(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(url => {
-            setAvatarURL(url);
-            setFileName(name);
-
-            const newContact = {
-              ...contact,
-              avatar: { url: url, name: name },
-            };
-            dispatch(updateContact(newContact));
-            setAvatarURL('');
-            setFileName('');
-          });
-        }
+      const storageRef = ref(
+        storage,
+        `contactAvatars/${user.id}/${contact.id}`
+      );
+      uploadBytesResumable(storageRef, selectedFile).then((snapshot) =>
+        getDownloadURL(snapshot.ref).then((url) => {
+          setAvatarURL(url);
+          setFileName(name);
+          dispatch(
+            updateContact({ ...contact, avatar: { url: url, name: name } })
+          );
+        })
       );
     } else {
       Notify.failure(
@@ -81,23 +71,24 @@ export default function Contact({ contact, userGroups, userTags }) {
   function handleDeleteAvatar() {
     // add function for delete image from storage
     // console.log(contact.avatar.split('/'));
-    const storageRef = ref(
-      storage,
-      `avatars/${user.id}/${contact.avatar.name}`
-    );
-    deleteObject(storageRef);
-    setAvatarURL('');
-    setFileName('');
-    dispatch(updateContact({ ...contact, avatar: { url: '', name: '' } }));
+    // const storageRef = ref(
+    //   storage,
+    //   `contactAvatars/${user.id}/${contact.avatar.name}`
+    // );
+    // deleteObject(storageRef);
+    removeFileFromStorage("contactAvatars", user.id, contact.avatar.name);
+    setAvatarURL("");
+    setFileName("");
+    dispatch(updateContact({ ...contact, avatar: { url: "", name: "" } }));
   }
 
   function handleDelete(id) {
     const data = { userId: user.id, contactId: id };
     Confirm.show(
-      'Delete Contact',
-      'Do you really want to delete this contact?',
-      'Yes',
-      'No',
+      "Delete Contact",
+      "Do you really want to delete this contact?",
+      "Yes",
+      "No",
       function okCb() {
         dispatch(deleteContact(data));
         navigate(-1);
@@ -109,8 +100,8 @@ export default function Contact({ contact, userGroups, userTags }) {
   function removeFromMembers(deletedContact) {
     if (deletedContact.groups.length > 0) {
       return deletedContact.groups
-        .map(groupId => userGroups.find(group => group.id === groupId))
-        .map(targetGroup => {
+        .map((groupId) => userGroups.find((group) => group.id === groupId))
+        .map((targetGroup) => {
           const targetGroupMembers = [...targetGroup.members];
           const index = targetGroupMembers.indexOf(deletedContact.id);
           targetGroupMembers.splice(index, 1);
@@ -125,8 +116,8 @@ export default function Contact({ contact, userGroups, userTags }) {
     }
     if (deletedContact.tags.length > 0) {
       return deletedContact.tags
-        .map(tagId => userTags.find(tag => tag.id === tagId))
-        .map(targetTag => {
+        .map((tagId) => userTags.find((tag) => tag.id === tagId))
+        .map((targetTag) => {
           const targetTagMembers = [...targetTag.members];
           const index = targetTagMembers.indexOf(deletedContact.id);
           targetTagMembers.splice(index, 1);

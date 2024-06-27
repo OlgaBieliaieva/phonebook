@@ -1,9 +1,9 @@
-import { useDispatch } from 'react-redux';
-import { useAuth } from 'hooks/useAuth';
-import { logout } from 'redux/auth/operations';
+import { useDispatch } from "react-redux";
+import { useAuth } from "../../hooks/useAuth";
+import { logout } from "../../redux/auth/operations";
 //MUI
-import { Stack, Avatar, IconButton, Tooltip } from '@mui/material';
-import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+import { Stack, Avatar, IconButton, Tooltip } from "@mui/material";
+import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 
 export default function UserMenu() {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export default function UserMenu() {
         <IconButton
           type="button"
           onClick={() => dispatch(logout())}
-          sx={{ color: '#fff', marginTop: 0 }}
+          sx={{ color: "#fff", marginTop: 0 }}
         >
           <LogoutSharpIcon />
         </IconButton>

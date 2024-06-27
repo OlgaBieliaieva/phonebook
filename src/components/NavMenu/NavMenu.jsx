@@ -1,22 +1,22 @@
-import { Link } from 'react-router-dom';
-import useModal from 'hooks/useModal';
-import Modal from 'components/Modal/Modal';
+import { Link } from "react-router-dom";
+import useModal from "../../hooks/useModal";
+import Modal from "../Modal/Modal";
 import {
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   Tooltip,
-} from '@mui/material';
-import ContactsSharpIcon from '@mui/icons-material/ContactsSharp';
-import GroupSharpIcon from '@mui/icons-material/GroupSharp';
-import TagSharpIcon from '@mui/icons-material/TagSharp';
-import NotificationsSharpIcon from '@mui/icons-material/NotificationsSharp';
-import CalendarMonthSharpIcon from '@mui/icons-material/CalendarMonthSharp';
-import QuestionMarkSharpIcon from '@mui/icons-material/QuestionMarkSharp';
-import SettingsSharpIcon from '@mui/icons-material/SettingsSharp';
-import HomeSharpIcon from '@mui/icons-material/HomeSharp';
-import css from './NavMenu.module.css';
+} from "@mui/material";
+import ContactsSharpIcon from "@mui/icons-material/ContactsSharp";
+import GroupSharpIcon from "@mui/icons-material/GroupSharp";
+import TagSharpIcon from "@mui/icons-material/TagSharp";
+import NotificationsSharpIcon from "@mui/icons-material/NotificationsSharp";
+import CalendarMonthSharpIcon from "@mui/icons-material/CalendarMonthSharp";
+import QuestionMarkSharpIcon from "@mui/icons-material/QuestionMarkSharp";
+import SettingsSharpIcon from "@mui/icons-material/SettingsSharp";
+import HomeSharpIcon from "@mui/icons-material/HomeSharp";
+import css from "./NavMenu.module.css";
 
 export default function NavMenu() {
   const { isModalOpen, toggleModal } = useModal();
@@ -24,52 +24,52 @@ export default function NavMenu() {
     <>
       <List
         sx={{
-          color: '#fff',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '24px',
-          width: '100%',
+          color: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "24px",
+          width: "100%",
           paddingTop: 0,
           paddingBottom: 0,
         }}
       >
         <ListItem
-          key={'Home'}
+          key={"Home"}
           disablePadding
           sx={{
-            maxWidth: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            maxWidth: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Link
             to="/"
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <ListItemButton
               sx={{
                 padding: 0,
-                maxWidth: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                maxWidth: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: '#fff',
-                  minWidth: '40px',
-                  maxWidth: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  color: "#fff",
+                  minWidth: "40px",
+                  maxWidth: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Tooltip title="Home" arrow>
@@ -81,40 +81,40 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Contacts'}
+          key={"Contacts"}
           disablePadding
           sx={{
-            maxWidth: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            maxWidth: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Link
             to="all"
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <ListItemButton
               sx={{
                 padding: 0,
-                maxWidth: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+                maxWidth: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: '#fff',
-                  minWidth: '40px',
-                  maxWidth: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  color: "#fff",
+                  minWidth: "40px",
+                  maxWidth: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Tooltip title="Contacts" arrow>
@@ -126,31 +126,31 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Groups'}
+          key={"Groups"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Link
             to="groups"
             style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <ListItemButton sx={{ padding: 0, width: '100%' }}>
+            <ListItemButton sx={{ padding: 0, width: "100%" }}>
               <ListItemIcon
                 sx={{
-                  color: '#fff',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  color: "#fff",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Tooltip title="Groups" arrow>
@@ -162,25 +162,25 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Tags'}
+          key={"Tags"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ListItemButton
-            sx={{ padding: 0, width: '100%' }}
+            sx={{ padding: 0, width: "100%" }}
             onClick={toggleModal}
           >
             <ListItemIcon
               sx={{
-                color: '#fff',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                color: "#fff",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Tooltip title="Tags" arrow>
@@ -191,25 +191,25 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Notifications'}
+          key={"Notifications"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ListItemButton
-            sx={{ padding: 0, width: '100%' }}
+            sx={{ padding: 0, width: "100%" }}
             onClick={toggleModal}
           >
             <ListItemIcon
               sx={{
-                color: '#fff',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                color: "#fff",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Tooltip title="Notifications" arrow>
@@ -220,25 +220,25 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Calendar'}
+          key={"Calendar"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ListItemButton
-            sx={{ padding: 0, width: '100%' }}
+            sx={{ padding: 0, width: "100%" }}
             onClick={toggleModal}
           >
             <ListItemIcon
               sx={{
-                color: '#fff',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                color: "#fff",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Tooltip title="Calendar" arrow>
@@ -249,25 +249,25 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Support'}
+          key={"Support"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ListItemButton
-            sx={{ padding: 0, width: '100%' }}
+            sx={{ padding: 0, width: "100%" }}
             onClick={toggleModal}
           >
             <ListItemIcon
               sx={{
-                color: '#fff',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                color: "#fff",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Tooltip title="Support" arrow>
@@ -278,25 +278,25 @@ export default function NavMenu() {
         </ListItem>
 
         <ListItem
-          key={'Settings'}
+          key={"Settings"}
           disablePadding
           sx={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <ListItemButton
-            sx={{ padding: 0, width: '100%' }}
+            sx={{ padding: 0, width: "100%" }}
             onClick={toggleModal}
           >
             <ListItemIcon
               sx={{
-                color: '#fff',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
+                color: "#fff",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <Tooltip title="Settings" arrow>

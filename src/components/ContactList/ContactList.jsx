@@ -1,5 +1,5 @@
-import ContactListItem from 'components/ContactListItem/ContactListItem';
-import css from './ContactList.module.css';
+import ContactListItem from "../ContactListItem/ContactListItem";
+import css from "./ContactList.module.css";
 
 export default function ContactList({ contacts, linkBtn }) {
   return (

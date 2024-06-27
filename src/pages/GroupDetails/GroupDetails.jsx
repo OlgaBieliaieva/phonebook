@@ -1,9 +1,9 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { selectContacts } from 'redux/contacts/selectors';
-import { selectGroups } from 'redux/groups/selectors';
-import PageHeader from 'components/PageHeader/PageHeader';
-import ContactList from 'components/ContactList/ContactList';
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { selectContacts } from "../../redux/contacts/selectors";
+import { selectGroups } from "../../redux/groups/selectors";
+import PageHeader from "../../components/PageHeader/PageHeader";
+import ContactList from "../../components/ContactList/ContactList";
 
 export default function GroupDetails() {
   const contacts = useSelector(selectContacts);
@@ -12,7 +12,7 @@ export default function GroupDetails() {
   const navigate = useNavigate();
 
   const targetGroupId =
-    location.pathname.split('/')[location.pathname.split('/').length - 1];
+    location.pathname.split("/")[location.pathname.split("/").length - 1];
 
   function goBack() {
     navigate(-1);
@@ -23,12 +23,12 @@ export default function GroupDetails() {
       <PageHeader
         btnTitle="<<-Back"
         btnAction={goBack}
-        title={groups.find(group => group.id === targetGroupId).name}
+        title={groups.find((group) => group.id === targetGroupId).name}
       />
       <ContactList
-        contacts={contacts.filter(contact =>
+        contacts={contacts.filter((contact) =>
           contact.groups.includes(
-            groups.find(group => group.id === targetGroupId).name
+            groups.find((group) => group.id === targetGroupId).name
           )
         )}
         linkBtn={false}

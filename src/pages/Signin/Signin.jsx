@@ -1,4 +1,4 @@
-import LoginForm from 'components/LoginForm/LoginForm';
+import LoginForm from '../../components/LoginForm/LoginForm';
 import css from './Signin.module.css';
 
 export default function Signin() {

@@ -1,32 +1,32 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { PrivateRoute } from 'components/PrivateRoute';
-import { RestrictedRoute } from 'components/RestrictedRoute';
-import SharedLayout from 'components/SharedLayout/SharedLayout';
-import { useAuth } from 'hooks/useAuth';
-import { refresh } from 'redux/auth/operations';
-import Loader from 'components/Loader/Loader';
-import { selectUser } from 'redux/auth/selectors';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import { PrivateRoute } from "../PrivateRoute";
+import { RestrictedRoute } from "../RestrictedRoute";
+import SharedLayout from "../SharedLayout/SharedLayout";
+import { useAuth } from "../../hooks/useAuth";
+import { refresh } from "../../redux/auth/operations";
+import Loader from "../Loader/Loader";
+import { selectUser } from "../../redux/auth/selectors";
 
-const Home = lazy(() => import('../../pages/Home/Home'));
-const Signin = lazy(() => import('../../pages/Signin/Signin'));
-const Signup = lazy(() => import('../../pages/Signup/Signup'));
-const Dashboard = lazy(() => import('../Dashboard/Dashboard'));
-const Contacts = lazy(() => import('../../pages/Contacts/Contacts'));
+const Home = lazy(() => import("../../pages/Home/Home"));
+const Signin = lazy(() => import("../../pages/Signin/Signin"));
+const Signup = lazy(() => import("../../pages/Signup/Signup"));
+const Dashboard = lazy(() => import("../Dashboard/Dashboard"));
+const Contacts = lazy(() => import("../../pages/Contacts/Contacts"));
 const ContactDetails = lazy(() =>
-  import('../../pages/ContactDetails/ContactDetails')
+  import("../../pages/ContactDetails/ContactDetails")
 );
-const Groups = lazy(() => import('../../pages/Groups/Groups'));
+const Groups = lazy(() => import("../../pages/Groups/Groups"));
 const GroupDetails = lazy(() =>
-  import('../../pages/GroupDetails/GroupDetails')
+  import("../../pages/GroupDetails/GroupDetails")
 );
 
 export default function App() {
   const dispatch = useDispatch();
   const { isRefreshing } = useAuth();
-  const currentUser = useSelector(selectUser)
+  const currentUser = useSelector(selectUser);
 
   useEffect(() => {
     dispatch(refresh());
