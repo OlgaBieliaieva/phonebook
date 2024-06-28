@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  // deleteObject,
-} from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../utils/firebaseConfig";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import { Notify, Confirm } from "notiflix";
@@ -32,11 +27,11 @@ import css from "./Contact.module.css";
 
 export default function Contact({ contact, userGroups, userTags }) {
   const [avatarURL, setAvatarURL] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
+
   const formattedGroups = contact.groups.map(
     (groupId) => userGroups.find((group) => group.id === groupId).name
   );
@@ -69,13 +64,6 @@ export default function Contact({ contact, userGroups, userTags }) {
     }
   }
   function handleDeleteAvatar() {
-    // add function for delete image from storage
-    // console.log(contact.avatar.split('/'));
-    // const storageRef = ref(
-    //   storage,
-    //   `contactAvatars/${user.id}/${contact.avatar.name}`
-    // );
-    // deleteObject(storageRef);
     removeFileFromStorage("contactAvatars", user.id, contact.avatar.name);
     setAvatarURL("");
 
@@ -93,6 +81,7 @@ export default function Contact({ contact, userGroups, userTags }) {
         dispatch(deleteContact(data));
         navigate(-1);
         removeFromMembers(contact);
+        removeFileFromStorage("contactAvatars", user.id, contact.avatar.name);
       }
     );
   }
@@ -208,9 +197,9 @@ export default function Contact({ contact, userGroups, userTags }) {
             <p
               className={css.contactName}
             >{`${contact.firstName} ${contact.middleName} ${contact.lastName}`}</p>
-            <p
-              className={css.contactRole}
-            >{`${contact.jobTitle} | ${contact.company}`}</p>
+            <p className={css.contactRole}>{`${
+              contact.jobTitle || "position"
+            } | ${contact.company || "company"}`}</p>
           </div>
           <ul className={css.contactAttributesList}>
             <li className={css.contactAttribute}>

@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateContact } from "../../redux/contacts/operations";
-import CustomSelect from "../CustomSelect/CustomSelect";
 import css from "./AddContactForm.module.css";
 
 const validationSchema = Yup.object().shape({
@@ -20,20 +19,18 @@ const validationSchema = Yup.object().shape({
   tags: Yup.array().default([]),
 });
 
-export default function EditContactForm({
-  onClose,
-  contact,
-  userGroups,
-  userTags,
-}) {
+export default function EditContactForm({ onClose, contact }) {
   const dispatch = useDispatch();
+  const { avatar, createdAt, id, groups, tags, owner, ...initialValues } =
+    contact;
 
-  const handleSubmit = (values, { resetForm }) => {
-    const updatedContact = { ...values };
+  function handleSubmit(values, { resetForm }) {
+    const updatedContact = { ...values, id };
+
     dispatch(updateContact(updatedContact));
     resetForm();
     onClose();
-  };
+  }
 
   return (
     <div className={css.formWrapper}>
@@ -41,20 +38,20 @@ export default function EditContactForm({
         <h3>Edit Contact</h3>
       </div>
       <Formik
-        initialValues={contact}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ values }) => (
           <Form
             className={css.form}
-            name="addContactForm"
+            name="editContactForm"
             id="addContactForm"
             autoComplete="off"
           >
             <fieldset
               className={css.formField}
-              form="addContactForm"
+              form="editContactForm"
               name="name"
               role="group"
             >
@@ -94,7 +91,7 @@ export default function EditContactForm({
             </fieldset>
             <fieldset
               className={css.formField}
-              form="addContactForm"
+              form="editContactForm"
               name="job"
               role="group"
             >
@@ -123,7 +120,7 @@ export default function EditContactForm({
             </fieldset>
             <fieldset
               className={css.formField}
-              form="addContactForm"
+              form="editContactForm"
               name="contacts"
               role="group"
             >
@@ -152,8 +149,8 @@ export default function EditContactForm({
             </fieldset>
             <fieldset
               className={css.formField}
-              form="addContactForm"
-              name="attributes-1"
+              form="editContactForm"
+              name="attributes"
               role="group"
             >
               <label className={css.formLabel}>
@@ -175,31 +172,7 @@ export default function EditContactForm({
                 </ErrorMessage>
               </label>
             </fieldset>
-            <fieldset
-              className={css.formField}
-              form="addContactForm"
-              name="attributes-2"
-              role="group"
-            >
-              <label className={css.formLabel}>
-                <Field
-                  className={css.formInput}
-                  name="groups"
-                  component={CustomSelect}
-                  placeholder="Select group..."
-                  valuesList={userGroups}
-                />
-              </label>
-              <label className={css.formLabel}>
-                <Field
-                  className={css.formInput}
-                  name="tags"
-                  component={CustomSelect}
-                  placeholder="Select tag..."
-                  valuesList={userTags}
-                />
-              </label>
-            </fieldset>
+
             <button className={css.formBtn} type="submit">
               Update Contact
             </button>

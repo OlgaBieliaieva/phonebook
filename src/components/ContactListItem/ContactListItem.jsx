@@ -41,7 +41,9 @@ export default function ContactListItem({
         <p
           className={css.contactName}
         >{`${firstName} ${middleName} ${lastName}`}</p>
-        <p className={css.contactRole}>{`${jobTitle} | ${company}`}</p>
+        <p className={css.contactRole}>{`${jobTitle || "position"} | ${
+          company || "company"
+        }`}</p>
       </div>
       <ul className={css.btnList}>
         <li>
@@ -85,7 +87,11 @@ export default function ContactListItem({
                 <EmailSharpIcon />
               )}
 
-              {targetBtn === "phone" ? <p>{phone}</p> : <p>{email}</p>}
+              {targetBtn === "phone" ? (
+                <a href={`tel:${phone}`}>{phone}</a>
+              ) : (
+                <a href={`mailto:${email}`}>{email || "email is not specified"}</a>
+              )}
             </div>
           </div>
         </Modal>

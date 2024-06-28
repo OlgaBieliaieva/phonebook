@@ -43,7 +43,7 @@ export default function CustomSelect({
         value={checked}
         onChange={handleChange}
         placeholder={placeholder}
-        input={<OutlinedInput id="select-multiple-chip" />}
+        input={<OutlinedInput />}
         renderValue={selected => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map(value => (
