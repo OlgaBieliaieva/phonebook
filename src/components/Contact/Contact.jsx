@@ -32,7 +32,7 @@ export default function Contact({ contact, userGroups, userTags }) {
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
-  const birthdayArray = contact.birthday.split("-");
+  const birthdayArray = contact.birthday ? contact.birthday.split("-") : "";
 
   const formattedGroups = contact.groups.map(
     (groupId) => userGroups.find((group) => group.id === groupId).name
@@ -246,7 +246,7 @@ export default function Contact({ contact, userGroups, userTags }) {
           <li className={css.infoItem}>
             <CakeSharpIcon />
             <p className={css.itemContent}>
-              {birthdayArray[0]
+              {birthdayArray
                 ? format(
                     new Date(
                       Number(birthdayArray[0]),
