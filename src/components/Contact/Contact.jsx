@@ -246,14 +246,16 @@ export default function Contact({ contact, userGroups, userTags }) {
           <li className={css.infoItem}>
             <CakeSharpIcon />
             <p className={css.itemContent}>
-              {format(
-                new Date(
-                  Number(birthdayArray[0]),
-                  Number(birthdayArray[1] - 1),
-                  Number(birthdayArray[2])
-                ),
-                "dd MMMM yyyy"
-              )}
+              {birthdayArray[0]
+                ? format(
+                    new Date(
+                      Number(birthdayArray[0]),
+                      Number(birthdayArray[1] - 1),
+                      Number(birthdayArray[2])
+                    ),
+                    "dd MMMM yyyy"
+                  )
+                : ""}
             </p>
           </li>
           <li className={css.infoItem}>
