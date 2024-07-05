@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Notify, Confirm } from "notiflix";
+import { format } from "date-fns";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../utils/firebaseConfig";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
-import { Notify, Confirm } from "notiflix";
 import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
 import { deleteContact, updateContact } from "../../redux/contacts/operations";
@@ -31,6 +32,7 @@ export default function Contact({ contact, userGroups, userTags }) {
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
+  const birthdayArray = contact.birthday.split("-");
 
   const formattedGroups = contact.groups.map(
     (groupId) => userGroups.find((group) => group.id === groupId).name
@@ -43,7 +45,6 @@ export default function Contact({ contact, userGroups, userTags }) {
     const selectedFile = e.target.files[0];
 
     if (selectedFile.size < 10000000) {
-      const name = selectedFile.name;
       const storageRef = ref(
         storage,
         `contactAvatars/${user.id}/${contact.id}`
@@ -53,7 +54,10 @@ export default function Contact({ contact, userGroups, userTags }) {
           setAvatarURL(url);
 
           dispatch(
-            updateContact({ ...contact, avatar: { url: url, name: name } })
+            updateContact({
+              ...contact,
+              avatar: { url: url, name: contact.id },
+            })
           );
         })
       );
@@ -241,7 +245,16 @@ export default function Contact({ contact, userGroups, userTags }) {
           </li>
           <li className={css.infoItem}>
             <CakeSharpIcon />
-            <p className={css.itemContent}>{contact.birthday}</p>
+            <p className={css.itemContent}>
+              {format(
+                new Date(
+                  Number(birthdayArray[0]),
+                  Number(birthdayArray[1] - 1),
+                  Number(birthdayArray[2])
+                ),
+                "dd MMMM yyyy"
+              )}
+            </p>
           </li>
           <li className={css.infoItem}>
             <SpeakerNotesSharpIcon />

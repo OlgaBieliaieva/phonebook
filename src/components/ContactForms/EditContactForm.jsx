@@ -2,6 +2,9 @@ import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateContact } from "../../redux/contacts/operations";
+import { updateGroup } from "../../redux/groups/operations";
+import { updateTag } from "../../redux/tags/operations";
+import CustomSelect from "../CustomSelect/CustomSelect";
 import css from "./AddContactForm.module.css";
 
 const validationSchema = Yup.object().shape({
@@ -19,17 +22,119 @@ const validationSchema = Yup.object().shape({
   tags: Yup.array().default([]),
 });
 
-export default function EditContactForm({ onClose, contact }) {
+export default function EditContactForm({
+  onClose,
+  contact,
+  userGroups,
+  userTags,
+}) {
   const dispatch = useDispatch();
-  const { avatar, createdAt, id, groups, tags, owner, ...initialValues } =
-    contact;
+  const { avatar, createdAt, id, owner, ...initialValues } = contact;
 
-  function handleSubmit(values, { resetForm }) {
-    const updatedContact = { ...values, id };
+  async function handleSubmit(values, { resetForm }) {
+    const selectedGroups = values.groups.map(
+      (selectedValue) =>
+        userGroups.find((group) => group.name === selectedValue).id
+    );
+    const selectedTags = values.tags.map(
+      (selectedValue) => userTags.find((tag) => tag.name === selectedValue).id
+    );
 
-    dispatch(updateContact(updatedContact));
+    const updatedContact = {
+      ...values,
+      groups: selectedGroups,
+      tags: selectedTags,
+      id,
+    };
+
+    await dispatch(updateContact(updatedContact))
+      .then((result) => updateContactAttributes(result.payload))
+      .catch((err) => console.log(err));
     resetForm();
     onClose();
+  }
+
+  function updateContactAttributes(updatedContact) {
+    let updatedMembers = [];
+    userGroups.map((group) => {
+      if (
+        group.members.includes(updatedContact.id) &&
+        updatedContact.groups.includes(group.id)
+      ) {
+        return group;
+      }
+      if (
+        group.members.includes(updatedContact.id) &&
+        !updatedContact.groups.includes(group.id)
+      ) {
+        const targetIndex = group.members.indexOf(updatedContact.id);
+
+        updatedMembers = [...group.members];
+        updatedMembers.splice(targetIndex, 1);
+
+        return dispatch(
+          updateGroup({
+            id: group.id,
+            members: updatedMembers,
+          })
+        );
+      }
+      if (
+        !group.members.includes(updatedContact.id) &&
+        updatedContact.groups.includes(group.id)
+      ) {
+        updatedMembers = [...group.members];
+        updatedMembers.push(updatedContact.id);
+
+        return dispatch(
+          updateGroup({
+            id: group.id,
+            members: updatedMembers,
+          })
+        );
+      }
+      return null;
+    });
+
+    userTags.map((tag) => {
+      if (
+        tag.members.includes(updatedContact.id) &&
+        updatedContact.tags.includes(tag.id)
+      ) {
+        return tag;
+      }
+      if (
+        tag.members.includes(updatedContact.id) &&
+        !updatedContact.tags.includes(tag.id)
+      ) {
+        const targetIndex = tag.members.indexOf(updatedContact.id);
+
+        updatedMembers = [...tag.members];
+        updatedMembers.splice(targetIndex, 1);
+
+        return dispatch(
+          updateTag({
+            id: tag.id,
+            members: updatedMembers,
+          })
+        );
+      }
+      if (
+        !tag.members.includes(updatedContact.id) &&
+        updatedContact.tags.includes(tag.id)
+      ) {
+        updatedMembers = [...tag.members];
+        updatedMembers.push(updatedContact.id);
+
+        return dispatch(
+          updateTag({
+            id: tag.id,
+            members: updatedMembers,
+          })
+        );
+      }
+      return null;
+    });
   }
 
   return (
@@ -172,7 +277,31 @@ export default function EditContactForm({ onClose, contact }) {
                 </ErrorMessage>
               </label>
             </fieldset>
-
+            <fieldset
+              className={css.formField}
+              form="addContactForm"
+              name="attributes-2"
+              role="group"
+            >
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  name="groups"
+                  component={CustomSelect}
+                  placeholder="Select group..."
+                  valuesList={userGroups}
+                />
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  name="tags"
+                  component={CustomSelect}
+                  placeholder="Select tag..."
+                  valuesList={userTags}
+                />
+              </label>
+            </fieldset>
             <button className={css.formBtn} type="submit">
               Update Contact
             </button>

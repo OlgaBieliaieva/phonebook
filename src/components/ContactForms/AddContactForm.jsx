@@ -118,7 +118,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
 
   function updateContactAttributes(createdContact) {
     if (createdContact.groups.length > 0) {
-      return createdContact.groups
+      createdContact.groups
         .map((groupId) => userGroups.find((group) => group.id === groupId))
         .map((targetGroup) =>
           dispatch(
@@ -130,7 +130,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
         );
     }
     if (createdContact.tags.length > 0) {
-      return createdContact.tags
+      createdContact.tags
         .map((tagId) => userTags.find((tag) => tag.id === tagId))
         .map((targetTag) =>
           dispatch(
