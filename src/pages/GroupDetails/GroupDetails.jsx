@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { selectContacts } from "../../redux/contacts/selectors";
+// import { selectContacts } from "../../redux/contacts/selectors";
 import { selectGroups } from "../../redux/groups/selectors";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import ContactList from "../../components/ContactList/ContactList";
+// import ContactList from "../../components/ContactList/ContactList";
 
 export default function GroupDetails() {
-  const contacts = useSelector(selectContacts);
+  // const contacts = useSelector(selectContacts);
   const groups = useSelector(selectGroups);
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,14 +25,14 @@ export default function GroupDetails() {
         btnAction={goBack}
         title={groups.find((group) => group.id === targetGroupId).name}
       />
-      <ContactList
+      {/* <ContactList
         contacts={contacts.filter((contact) =>
           contact.groups.includes(
             groups.find((group) => group.id === targetGroupId).name
           )
         )}
         linkBtn={false}
-      />
+      /> */}
     </div>
   );
 }
