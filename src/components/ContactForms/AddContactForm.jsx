@@ -1,20 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  // deleteObject,
-} from "firebase/storage";
-import { storage } from "../../utils/firebaseConfig";
 import * as Yup from "yup";
 import { Notify } from "notiflix";
 import { useAuth } from "../../hooks/useAuth";
 import { addContact } from "../../redux/contacts/operations";
 import { updateGroup } from "../../redux/groups/operations";
 import { updateTag } from "../../redux/tags/operations";
-// import addFileToStorage from "../../utils/addFileTostorage";
+import addFileToStorage from "../../utils/addFileTostorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";
@@ -58,33 +51,16 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
   const [fileName, setFileName] = useState("");
   const dispatch = useDispatch();
   const { user } = useAuth();
+  const folderName = "contactAvatars";
 
   async function addAvatar(e) {
-    const selectedFile = e.target.files[0];
-
-    if (selectedFile.size < 10000000) {
-      const name = selectedFile.name;
-      const storageRef = ref(storage, `contactAvatars/${user.id}/${name}`);
-      uploadBytesResumable(storageRef, selectedFile).then((snapshot) =>
-        getDownloadURL(snapshot.ref).then((url) => {
-          setAvatarURL(url);
-          setFileName(name);
-        })
-      );
-    } else {
-      Notify.failure(
-        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
-      );
-    }
-    // const avatarProps = await addFileToStorage(e, "contactAvatars", user.id);
-    // if (avatarProps?.url) {
-    //   setAvatarURL(avatarProps.url);
-    //   setFileName(avatarProps.name);
-    // }
+    const result = await addFileToStorage(e, folderName, user.id);
+    setAvatarURL(result.url);
+    setFileName(result.name);
   }
 
   function deleteAvatar() {
-    removeFileFromStorage("contactAvatars", user.id, fileName);
+    removeFileFromStorage(folderName, user.id, fileName);
     setAvatarURL("");
     setFileName("");
   }
@@ -111,6 +87,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
 
     await dispatch(addContact(newContact))
       .then((result) => updateContactAttributes(result.payload))
+      .then(() => Notify.success("New contact successfully added"))
       .catch((err) => console.log(err));
     resetForm();
     onClose();

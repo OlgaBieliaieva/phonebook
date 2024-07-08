@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../utils/firebaseConfig";
 import * as Yup from "yup";
 import { Notify } from "notiflix";
 import { useAuth } from "../../hooks/useAuth";
 import { addGroup } from "../../redux/groups/operations";
+import { updateContact } from "../../redux/contacts/operations";
+import addFileToStorage from "../../utils/addFileTostorage";
+import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
@@ -33,37 +34,21 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
   const [fileName, setFileName] = useState("");
   const dispatch = useDispatch();
   const { user } = useAuth();
+  const folderName = "groupAvatars";
 
-  const handleFiles = async (e) => {
-    const selectedFile = e.target.files[0];
+  async function addAvatar(e) {
+    const result = await addFileToStorage(e, folderName, user.id);
+    setAvatarURL(result.url);
+    setFileName(result.name);
+  }
 
-    if (selectedFile.size < 10000000) {
-      const name = selectedFile.name;
-      const storageRef = ref(storage, `groups/${owner}/${name}`);
-      const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+  function deleteAvatar() {
+    removeFileFromStorage(folderName, user.id, fileName);
+    setAvatarURL("");
+    setFileName("");
+  }
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          console.log(error.message);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            setAvatarURL(url);
-            setFileName(name);
-          });
-        }
-      );
-    } else {
-      Notify.failure(
-        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
-      );
-    }
-  };
-
-  const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
+  async function handleSubmit(values, { resetForm }) {
     const selectedMembers = values.members.map(
       (member) =>
         contacts.find(
@@ -74,15 +59,36 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
     );
     const newGroup = {
       ...values,
-      avatar: avatarURL,
+      avatar: {
+        url: avatarURL,
+        name: fileName,
+      },
       owner: user.id,
       members: selectedMembers,
     };
-    console.log(newGroup);
-    dispatch(addGroup(newGroup));
-    // console.log(result);
-    // result.then(data=> addGroups).catch(err=> console.log(err))
-  };
+
+    await dispatch(addGroup(newGroup))
+      .then((result) => updateContacts(result.payload))
+      .then(() => Notify.success("New group successfully added"))
+      .catch((err) => console.log(err));
+    resetForm();
+    onClose();
+  }
+
+  function updateContacts(createdGroup) {
+    if (createdGroup.members.length > 0) {
+      createdGroup.members
+        .map((memberId) => contacts.find((contact) => contact.id === memberId))
+        .map((targetContact) =>
+          dispatch(
+            updateContact({
+              id: targetContact.id,
+              groups: [...targetContact.groups, createdGroup.id],
+            })
+          )
+        );
+    }
+  }
 
   return (
     <div className={css.formWrapper}>
@@ -122,15 +128,12 @@ export default function AddGroupForm({ onClose, owner, contacts }) {
                   type="file"
                   name="avatar"
                   accept="image/*"
-                  onChange={handleFiles}
+                  onChange={addAvatar}
                 />
               </label>
               <div>
                 {avatarURL && (
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    onClick={() => setAvatarURL("")}
-                  >
+                  <Button startIcon={<DeleteIcon />} onClick={deleteAvatar}>
                     Remove image
                   </Button>
                 )}

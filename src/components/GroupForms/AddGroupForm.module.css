@@ -16,14 +16,7 @@
   align-items: center;
   gap: 24px;
   overflow-y: scroll;
-  overscroll-behavior-block: contain;
-
-  @media screen and (min-width: 1024px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: start;
-    justify-content: center;
-  }
+  overscroll-behavior-block: contain;  
 }
 .formField {
   width: 90%;
@@ -33,11 +26,7 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  border-radius: 16px;
-
-  @media screen and (min-width: 1024px) {
-    flex-basis: calc((100% - 24px) / 2);
-  }
+  border-radius: 16px;  
 }
 .formLabel {
   width: 100%;
