@@ -1,0 +1,113 @@
+.groupWrapper {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+.mainInfoWrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  padding-bottom: 24px;
+  margin-top: 24px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #e7ecf2;
+}
+.toolsList {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+.toolsBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  color: #a0a4ac;
+  font-weight: 500;
+}
+
+.toolsBtn:hover {
+  background-color: #a0a4ac;
+  color: #fff;
+  cursor: pointer;
+}
+.toolsBtn.absolute {
+  position: absolute;
+  top: 32px;
+  left: 88px;
+}
+.toolsBtn.small {
+  padding: 4px;
+  background-color: transparent;
+  box-shadow: none;
+}
+.btnIcon {
+  width: 16px;
+  height: 16px;
+  @media screen and (min-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
+}
+.avatar {
+  width: 96px;
+  height: 96px;
+  position: absolute;
+  top: -32px;
+  left: 24px;
+  font-size: 32px;
+  font-weight: 700;
+  background-color: #e7ecf2;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+.groupName {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 18px;
+  }
+}
+.groupDesc {
+  display: block;
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  color: #a0a4ac;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  @media screen and (min-width: 768px) {
+    font-size: 16px;
+  }
+}
+.visuallyHidden {
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  margin: -1px;
+}

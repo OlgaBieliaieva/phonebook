@@ -1,0 +1,10 @@
+.infoWrapper {
+  width: 100%;
+  height: calc(100% - 250px - 28px);
+  padding-top: 16px;
+  padding-left: 16px;
+}
+.infoTitle {
+  font-size: 16px;
+  margin-bottom: 8px;
+}

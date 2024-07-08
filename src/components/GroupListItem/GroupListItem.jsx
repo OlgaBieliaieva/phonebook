@@ -8,7 +8,7 @@ export default function GroupListItem({ group }) {
     <li className={css.groupItem}>
       <Link to={group.id} className={css.groupItemLink}>
         <div className={css.groupItemNameWrapper}>
-          <Avatar style={{ backgroundColor: "#E7ECF2" }}>
+          <Avatar className={css.avatar}>
             {group.avatar.url ? (
               <img src={group.avatar.url} alt={group.name} />
             ) : (

@@ -15,6 +15,10 @@
   overflow-y: scroll;
   overscroll-behavior-block: contain;
 }
+.grey {
+  background-color: #e7ecf2;
+  border-top-left-radius: 8px;
+}
 /* .contactList::-webkit-scrollbar {
   display: none;
 } */

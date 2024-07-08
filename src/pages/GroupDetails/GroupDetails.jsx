@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { selectContacts } from "../../redux/contacts/selectors";
+import { selectContacts } from "../../redux/contacts/selectors";
 import { selectGroups } from "../../redux/groups/selectors";
 import PageHeader from "../../components/PageHeader/PageHeader";
-// import ContactList from "../../components/ContactList/ContactList";
+import Group from "../../components/Group/Group";
+import MembersInfo from "../../components/MembersInfo/MembersInfo";
+import ContactList from "../../components/ContactList/ContactList";
+import css from "./GroupDetails.module.css";
 
 export default function GroupDetails() {
-  // const contacts = useSelector(selectContacts);
+  const contacts = useSelector(selectContacts);
   const groups = useSelector(selectGroups);
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,20 +22,24 @@ export default function GroupDetails() {
   }
 
   return (
-    <div>
-      <PageHeader
-        btnTitle="<<-Back"
-        btnAction={goBack}
-        title={groups.find((group) => group.id === targetGroupId).name}
+    <div className={css.groupDetailsWrapper}>
+      <PageHeader btnTitle="<<-Back" btnAction={goBack} title="Group Details" />
+      <Group
+        group={groups.find((group) => group.id === targetGroupId)}
+        contacts={contacts}
       />
-      {/* <ContactList
-        contacts={contacts.filter((contact) =>
-          contact.groups.includes(
-            groups.find((group) => group.id === targetGroupId).name
-          )
-        )}
-        linkBtn={false}
-      /> */}
+      <MembersInfo
+        title="Group members"
+        group={groups.find((group) => group.id === targetGroupId)}
+      >
+        <ContactList
+          contacts={contacts.filter((contact) =>
+            contact.groups.includes(targetGroupId)
+          )}
+          linkBtn={false}
+          bg="grey"
+        />
+      </MembersInfo>
     </div>
   );
 }

@@ -10,6 +10,11 @@
   justify-content: space-between;
   align-items: center;
 }
+.avatar {
+  width: 52px;
+  height: 52px;
+  background-color: #e7ecf2;
+}
 .groupItemNameWrapper {
   display: flex;
   align-items: center;

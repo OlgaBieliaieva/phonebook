@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Notify, Confirm } from "notiflix";
+import { Confirm } from "notiflix";
 import { format } from "date-fns";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../utils/firebaseConfig";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
 import { deleteContact, updateContact } from "../../redux/contacts/operations";
 import { updateGroup } from "../../redux/groups/operations";
 import { updateTag } from "../../redux/tags/operations";
+import addFileToStorage from "../../utils/addFileTostorage";
 import Modal from "../Modal/Modal";
 import EditContactForm from "../ContactForms/EditContactForm";
 import { Tooltip, Avatar } from "@mui/material";
@@ -32,6 +31,7 @@ export default function Contact({ contact, userGroups, userTags }) {
   const dispatch = useDispatch();
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
+  const folderName = "contactAvatars";
   const birthdayArray = contact.birthday ? contact.birthday.split("-") : "";
 
   const formattedGroups = contact.groups.map(
@@ -41,34 +41,18 @@ export default function Contact({ contact, userGroups, userTags }) {
     (tagId) => userTags.find((tag) => tag.id === tagId).name
   );
 
-  function handleUpdateAvatar(e) {
-    const selectedFile = e.target.files[0];
-
-    if (selectedFile.size < 10000000) {
-      const storageRef = ref(
-        storage,
-        `contactAvatars/${user.id}/${contact.id}`
-      );
-      uploadBytesResumable(storageRef, selectedFile).then((snapshot) =>
-        getDownloadURL(snapshot.ref).then((url) => {
-          setAvatarURL(url);
-
-          dispatch(
-            updateContact({
-              ...contact,
-              avatar: { url: url, name: contact.id },
-            })
-          );
-        })
-      );
-    } else {
-      Notify.failure(
-        `Зображення ${selectedFile.name} занадто велике, оберіть інше зображення`
-      );
-    }
+  async function handleUpdateAvatar(e) {
+    const result = await addFileToStorage(e, folderName, user.id, contact.id);
+    setAvatarURL(result.url);
+    dispatch(
+      updateContact({
+        ...contact,
+        avatar: { url: result.url, name: contact.id },
+      })
+    );
   }
   function handleDeleteAvatar() {
-    removeFileFromStorage("contactAvatars", user.id, contact.avatar.name);
+    removeFileFromStorage(folderName, user.id, contact.avatar.name);
     setAvatarURL("");
 
     dispatch(updateContact({ ...contact, avatar: { url: "", name: "" } }));
@@ -237,11 +221,15 @@ export default function Contact({ contact, userGroups, userTags }) {
         <ul className={css.fullInfoWrapper}>
           <li className={css.infoItem}>
             <PhoneEnabledSharpIcon />
-            <p className={css.itemContent}>{contact.phone}</p>
+            <a className={css.itemContent} href={`tel:${contact.phone}`}>
+              {contact.phone}
+            </a>
           </li>
           <li className={css.infoItem}>
             <EmailSharpIcon />
-            <p className={css.itemContent}>{contact.email}</p>
+            <a className={css.itemContent} href={`mailto:${contact.email}`}>
+              {contact.email || ""}
+            </a>
           </li>
           <li className={css.infoItem}>
             <CakeSharpIcon />
