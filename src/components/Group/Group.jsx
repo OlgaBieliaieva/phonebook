@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Notify, Confirm } from "notiflix";
-import useModal from "../../hooks/useModal";
+// import { useNavigate } from "react-router-dom";
+// import { Notify, Confirm } from "notiflix";
+// import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
 import { updateGroup } from "../../redux/groups/operations";
 import addFileToStorage from "../../utils/addFileTostorage";
@@ -16,11 +16,14 @@ import AddIcon from "@mui/icons-material/Add";
 
 import css from "./Group.module.css";
 
-export default function Group({ group, contacts }) {
+export default function Group({
+  group,
+  // contacts
+}) {
   const [avatarURL, setAvatarURL] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isModalOpen, toggleModal } = useModal();
+  // const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const folderName = "groupAvatars";
 
