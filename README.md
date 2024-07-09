@@ -9,7 +9,6 @@ SmartBook is a web application designed for managing business contacts with feat
 - [Main Features](#features)
 - [Tech Stack](#tech-stack)
 - [Responsive Design](#responsive-design)
-- [Image Optimization](#image-optimization)
 - [Demo](#demo)
 - [Contributing](#contributing)
 - [License](#license)
