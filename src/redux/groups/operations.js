@@ -1,8 +1,8 @@
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchGroups = createAsyncThunk(
-  'groups/fetchGroups',
+  "groups/fetchGroups",
   async (userId, thunkAPI) => {
     try {
       const response = await axios.get(`/groups?owner=${userId}`);
@@ -14,10 +14,10 @@ export const fetchGroups = createAsyncThunk(
 );
 
 export const addGroup = createAsyncThunk(
-  'groups/addGroup',
+  "groups/addGroup",
   async (group, thunkAPI) => {
     try {
-      const response = await axios.post('/groups', { ...group });
+      const response = await axios.post("/groups", { ...group });
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -26,10 +26,12 @@ export const addGroup = createAsyncThunk(
 );
 
 export const deleteGroup = createAsyncThunk(
-  'groups/deleteGroup',
-  async (groupId, thunkAPI) => {
+  "groups/deleteGroup",
+  async (data, thunkAPI) => {
     try {
-      const response = await axios.delete(`/groups/${groupId}`);
+      const response = await axios.delete(
+        `/users/${data.userId}/groups/${data.groupId}`
+      );
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -38,7 +40,7 @@ export const deleteGroup = createAsyncThunk(
 );
 
 export const updateGroup = createAsyncThunk(
-  'groups/updateGroup',
+  "groups/updateGroup",
   async (newGroup, thunkAPI) => {
     try {
       const response = await axios.put(`/groups/${newGroup.id}`, {

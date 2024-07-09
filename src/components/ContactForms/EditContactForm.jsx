@@ -151,7 +151,7 @@ export default function EditContactForm({
           <Form
             className={css.form}
             name="editContactForm"
-            id="addContactForm"
+            id="editContactForm"
             autoComplete="off"
           >
             <fieldset

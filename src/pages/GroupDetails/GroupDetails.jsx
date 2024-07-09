@@ -26,7 +26,7 @@ export default function GroupDetails() {
       <PageHeader btnTitle="<<-Back" btnAction={goBack} title="Group Details" />
       <Group
         group={groups.find((group) => group.id === targetGroupId)}
-        // contacts={contacts}
+        contacts={contacts}
       />
       <MembersInfo
         title="Group members"
