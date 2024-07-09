@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 // import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
 import { updateGroup } from "../../redux/groups/operations";
-import addFileToStorage from "../../utils/addFileTostorage";
+import addFileToStorage from "../../utils/addFileToStorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 
 // MUI

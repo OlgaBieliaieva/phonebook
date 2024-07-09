@@ -6,7 +6,7 @@ import { Notify } from "notiflix";
 import { useAuth } from "../../hooks/useAuth";
 import { addGroup } from "../../redux/groups/operations";
 import { updateContact } from "../../redux/contacts/operations";
-import addFileToStorage from "../../utils/addFileTostorage";
+import addFileToStorage from "../../utils/addFileToStorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";
