@@ -7,7 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { addContact } from "../../redux/contacts/operations";
 import { updateGroup } from "../../redux/groups/operations";
 import { updateTag } from "../../redux/tags/operations";
-import addFileToStorage from "../../utils/addFileTostorage";
+import addFileToStorage from "../../utils/addFileToStorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";
