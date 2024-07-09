@@ -17,26 +17,17 @@
   gap: 24px;
   overflow-y: scroll;
   overscroll-behavior-block: contain;
-
-  @media screen and (min-width: 1024px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: start;
-    justify-content: center;
-  }
 }
 .formField {
-  width: 90%;
-  max-width: 512px;
+  width: 256px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   padding: 16px;
   border-radius: 16px;
-  
-  @media screen and (min-width: 1024px) {
-    flex-basis: calc((100% - 24px) / 2);
+  @media screen and (min-width: 768px) {
+    width: 512px;
   }
 }
 .formLabel {
@@ -57,7 +48,7 @@
   font-size: 16px;
   border: 1px solid #a8aab3;
 }
-.formInput:focus-visible{
+.formInput:focus-visible {
   outline: none;
 }
 .formBtn {

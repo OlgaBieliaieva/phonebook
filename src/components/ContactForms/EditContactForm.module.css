@@ -17,13 +17,6 @@
   gap: 24px;
   overflow-y: scroll;
   overscroll-behavior-block: contain;
-
-  @media screen and (min-width: 1024px) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: start;
-    justify-content: center;
-  }
 }
 .formField {
   width: 256px;
@@ -36,10 +29,6 @@
 
   @media screen and (min-width: 768px) {
     width: 512px;
-  }
-
-  @media screen and (min-width: 1024px) {
-    flex-basis: calc((100% - 24px) / 2);
   }
 }
 .formLabel {
