@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# SmartBook
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+SmartBook is a web application designed for managing business contacts with features that allow you to group contacts, tag them, add personal notes, and create events and meetings.
 
-In the project directory, you can run:
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- [Main Features](#features)
+- [Tech Stack](#tech-stack)
+- [Responsive Design](#responsive-design)
+- [Image Optimization](#image-optimization)
+- [Demo](#demo)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+## Main Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Contact Management: Add, edit, and delete business contacts.
+- Grouping: Organize contacts into groups for better management.
+- Tagging: Assign tags to contacts for easier categorization and searching.
+- Notes: Add personal notes to each contact.
+- Event Creation: Schedule and manage business events and meetings.
+- Responsive Design: Optimized for various devices and screen sizes.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+Front End
+- Create React App: A robust and flexible environment to build the application
+- Webpack: Module bundler to compile JavaScript modules.
+- Redux Toolkit: State management tool for efficient and scalable state handling.
+- Formik: Forms management library for handling forms and validation.
+- Yup: Schema builder for form validation.
+- Axios: Promise-based HTTP client for API calls.
+- Material-UI (MUI): Component library for designing responsive user interfaces.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Back End
+- MockAPI: Mock backend to simulate RESTful API services.
+- Firebase Storage: Cloud storage for storing and retrieving files.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Responsive Design
+Our app is fully responsive and adapts seamlessly to various screen sizes:
+- Mobile: Optimized for touch interactions with easy navigation.
+- Tablet: Balanced layout that provides a good mix of content and visual elements.
+- Desktop: Full-featured experience with enhanced visuals and additional content.
+## Demo
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Deployed on Vercel
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+[SmartBook](https://phonebook-seven-beta.vercel.app/)
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+#### Contact Management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Add Contact: Use the form to input contact details and save them.
+- Edit Contact: Select a contact to update their information.
+- Delete Contact: Remove a contact from the list.
 
-### Analyzing the Bundle Size
+#### Grouping and Tagging
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Create Group: Organize contacts by creating groups.
+- Assign Tags: Tag contacts for easier search and categorization.
 
-### Making a Progressive Web App
+#### Notes and Events
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Add Notes: Write personal notes for each contact.
+- Create Events: Schedule business meetings and events.
+## Contributing
 
-### Advanced Configuration
+We welcome contributions to improve SmartBook. Please fork the repository and create a pull request with your changes. Make sure to follow the code style and include tests for new features.
+ 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Authors
 
-### Deployment
+- [Olha Shapoval](https://github.com/OlgaBieliaieva)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+## 🔗 Links
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/olha-shapoval)
+
+
