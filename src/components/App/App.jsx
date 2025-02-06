@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PrivateRoute } from "../PrivateRoute";
@@ -8,7 +8,6 @@ import SharedLayout from "../SharedLayout/SharedLayout";
 import { useAuth } from "../../hooks/useAuth";
 import { refresh } from "../../redux/auth/operations";
 import Loader from "../Loader/Loader";
-import { selectUser } from "../../redux/auth/selectors";
 
 const Home = lazy(() => import("../../pages/Home/Home"));
 const Signin = lazy(() => import("../../pages/Signin/Signin"));
@@ -25,8 +24,7 @@ const GroupDetails = lazy(() =>
 
 export default function App() {
   const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
-  const currentUser = useSelector(selectUser);
+  const { isRefreshing, user } = useAuth();
 
   useEffect(() => {
     dispatch(refresh());
@@ -41,7 +39,7 @@ export default function App() {
           index
           element={
             <RestrictedRoute
-              redirectTo={`/contacts/${currentUser?.id}`}
+              redirectTo={`/contacts/${user?.id}`}
               component={<Signin />}
             />
           }
@@ -50,7 +48,7 @@ export default function App() {
           path="/signup"
           element={
             <RestrictedRoute
-              redirectTo={`/contacts/${currentUser?.id}`}
+              redirectTo={`/contacts/${user?.id}`}
               component={<Signup />}
             />
           }

@@ -1,92 +1,82 @@
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Notify } from 'notiflix';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { Notify } from "notiflix";
+import { workspaceApiClient } from "../../services/apiClient";
 
-axios.defaults.baseURL = 'https://667320036ca902ae11b333e3.mockapi.io/api/';
+// axios.defaults.baseURL = 'https://667320036ca902ae11b333e3.mockapi.io/api/';
 
 export const register = createAsyncThunk(
-  'contactBookApp/register',
+  "auth/register",
   async (user, thunkAPI) => {
     try {
-      const { data } = await axios.get(`/users`);
-      const isExist = data.find(item => item.email === user.email);
+      const { data, status } = await workspaceApiClient.post(
+        "users/signup",
+        user
+      );
 
-      if (isExist) {
-        Notify.failure('Email is already in use');
+      if (status !== 201) {
+        Notify.failure("Registration failed");
         return null;
-      } else {
-        const result = await axios.post('/users', { ...user });
-
-        if (result.status !== 201) {
-          return null;
-        } else {
-          localStorage.setItem('user', result.data.id);
-
-          return result.data;
-        }
       }
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
+
+      Notify.success("Registration successful!");
+      return data.user;
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        Notify.failure("Email is already in use");
+      } else {
+        Notify.failure("Something went wrong. Please try again later.");
+      }
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
 export const login = createAsyncThunk(
-  'contactBookApp/login',
+  "auth/login",
   async (credentials, thunkAPI) => {
     try {
-      const users = await axios.get('/users');
+      const { data, status } = await workspaceApiClient.post("users/signin", {
+        email: credentials.email,
+        password: credentials.password,
+      });
 
-      if (users.status === 200) {
-        const currentUser = users.data.find(
-          user =>
-            user.email === credentials.email &&
-            user.password === credentials.password
-        );
-        if (currentUser) {
-          localStorage.setItem('user', currentUser.id);
-          return currentUser;
-        } else {
-          Notify.failure('Invalid email or password');
-          return null;
-        }
-      }
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const logout = createAsyncThunk(
-  'contactBookApp/logout',
-  async (_, thunkAPI) => {
-    try {
-      localStorage.clear();
-      return null;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const refresh = createAsyncThunk(
-  'contactBookApp/refresh',
-  async (_, thunkAPI) => {
-    try {
-      const users = await axios.get('/users');
-      const userId = JSON.parse(localStorage.getItem('user'));
-      if (userId) {
-        if (users.status === 200) {
-          const currentUser = users.data.find(
-            user => user.id === userId.toString()
-          );
-          return currentUser;
-        }
+      if (status === 200) {
+        return data.user;
       } else {
+        Notify.failure("Invalid email or password");
         return null;
       }
     } catch (e) {
+      Notify.failure("An error occurred. Please try again.");
       return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
+
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
+  try {
+    await workspaceApiClient.post(
+      "users/signout",
+      {},
+      { withCredentials: true }
+    );
+
+    return null;
+  } catch (e) {
+    console.log(e);
+
+    return thunkAPI.rejectWithValue(e.message);
+  }
+});
+
+export const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
+  try {
+    const { data } = await workspaceApiClient.get("users/current", {
+      withCredentials: true,
+    });
+
+    return data.user;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e.message);
+  }
+});
