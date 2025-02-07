@@ -19,7 +19,7 @@ export const register = createAsyncThunk(
       }
 
       Notify.success("Registration successful!");
-      return data.user;
+      return data;
     } catch (error) {
       if (error.response && error.response.status === 409) {
         Notify.failure("Email is already in use");
@@ -41,7 +41,7 @@ export const login = createAsyncThunk(
       });
 
       if (status === 200) {
-        return data.user;
+        return data;
       } else {
         Notify.failure("Invalid email or password");
         return null;
@@ -49,6 +49,24 @@ export const login = createAsyncThunk(
     } catch (e) {
       Notify.failure("An error occurred. Please try again.");
       return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const statusUpdate = createAsyncThunk(
+  "auth/statusUpdate",
+  async (newStatus, thunkAPI) => {
+    try {
+      const response = await workspaceApiClient.patch(
+        "users/status",
+        { status: newStatus },
+        { withCredentials: true }
+      );
+
+      return response.data;
+    } catch (e) {
+      Notify.failure("Failed to update status. Please try again.");
+      return thunkAPI.rejectWithValue(e.response?.data?.message || e.message);
     }
   }
 );
@@ -64,7 +82,6 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
     return null;
   } catch (e) {
     console.log(e);
-
     return thunkAPI.rejectWithValue(e.message);
   }
 });
@@ -75,7 +92,7 @@ export const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
       withCredentials: true,
     });
 
-    return data.user;
+    return data;
   } catch (e) {
     return thunkAPI.rejectWithValue(e.message);
   }

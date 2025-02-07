@@ -1,0 +1,20 @@
+.secondaryContent {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+.subscriptionBadge {
+  position: absolute;
+  top: 0;
+  right: 12px;
+}
+.freeSubscription {
+  color: #e3d026;
+}
+.premiumSubscription {
+  color: #9c27b0;
+}
+/* .menuItemContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+} */
