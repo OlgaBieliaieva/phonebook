@@ -18,7 +18,7 @@ export const register = createAsyncThunk(
         return null;
       }
 
-      Notify.success("Registration successful!");
+      Notify.success("Registration successfully!");
       return data;
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -97,3 +97,33 @@ export const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(e.message);
   }
 });
+
+export const addAvatar = createAsyncThunk(
+  "auth/addAvatar",
+  async (file, thunkAPI) => {
+    try {
+      // Створюємо formData для завантаження файлу
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      // Відправляємо PATCH запит на сервер (шлях "users/avatar" відповідає вашому маршруту)
+      const { data, status } = await workspaceApiClient.patch("users/avatar", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (status === 200) {
+        Notify.success("Avatar updated uccessfully!");
+        return data; // Очікуємо, що сервер поверне оновлені дані користувача (наприклад, data.user)
+      } else {
+        Notify.failure("Failed to update avatar");
+        return thunkAPI.rejectWithValue("Failed to update avatar");
+      }
+    } catch (error) {
+      Notify.failure(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);

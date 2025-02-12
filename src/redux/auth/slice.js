@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, login, logout, refresh, statusUpdate } from "./operations";
+import { register, login, logout, refresh, statusUpdate, addAvatar } from "./operations";
 
 const initialState = {
   user: null,
@@ -65,12 +65,21 @@ const authSlice = createSlice({
           state.user = null;
           state.isLoggedIn = false;
         } else {
-          state.user = { ...action.payload.user };
+          state.user.status = action.payload.user.status;
           state.isLoggedIn = true;
         }
         state.statuses = action.payload.statuses
           ? [...action.payload.statuses]
           : null;
+      })
+      .addCase(addAvatar.fulfilled, (state, action) => {
+        if (action.payload.user === null) {
+          state.user = null;
+          state.isLoggedIn = false;
+        } else {
+          state.user.avatar = action.payload.user.avatar;
+          state.isLoggedIn = true;
+        }
       });
   },
 });
