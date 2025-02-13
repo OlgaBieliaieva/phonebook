@@ -8,6 +8,7 @@ import {
   addAvatar,
   deleteAvatar,
   updateProfile,
+  updateSubscription,
 } from "./operations";
 
 const initialState = {
@@ -110,6 +111,15 @@ const authSlice = createSlice({
         state.statuses = action.payload.statuses
           ? [...action.payload.statuses]
           : null;
+      })
+      .addCase(updateSubscription.fulfilled, (state, action) => {
+        if (action.payload.user === null) {
+          state.user = null;
+          state.isLoggedIn = false;
+        } else {
+          state.user.subscription = action.payload.user.subscription;
+          state.isLoggedIn = true;
+        }
       });
   },
 });

@@ -181,3 +181,29 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
+
+export const updateSubscription = createAsyncThunk(
+  "auth/updateSubscription",
+  async (subscriptionType, thunkAPI) => {
+    try {
+      const { data, status } = await workspaceApiClient.patch(
+        "users/subscription",
+        subscriptionType,
+        { withCredentials: true }
+      );
+
+      if (status === 200) {
+        Notify.success("Subscription updated successfully!");
+        return data;
+      } else {
+        Notify.failure("Failed to update subscription type");
+        return thunkAPI.rejectWithValue("Failed to update subscription type");
+      }
+    } catch (error) {
+      Notify.failure(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);

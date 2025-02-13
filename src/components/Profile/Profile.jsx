@@ -20,13 +20,14 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required("* it's a required field"),
 });
 
-export default function Profile({ user }) {
+export default function Profile({ user, closeModal }) {
   const [avatarURL, setAvatarURL] = useState(user.avatar || null);
   const { id, status, subscription, avatar, ...initialValues } = user;
   const dispatch = useDispatch();
 
   function handleSubmit(values, { resetForm }) {
     dispatch(updateProfile(values));
+    closeModal();
   }
 
   function handleAddAvatar(e) {

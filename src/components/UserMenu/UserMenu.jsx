@@ -5,6 +5,7 @@ import useModal from "../../hooks/useModal";
 import { logout, statusUpdate } from "../../redux/auth/operations";
 import Modal from "../Modal/Modal";
 import Profile from "../Profile/Profile";
+import Subscription from "../Subscription/Subscription";
 //MUI
 import {
   Stack,
@@ -55,7 +56,13 @@ export default function UserMenu() {
 
   const handleOpenProfile = () => {
     setAnchorEl(null);
-    setModalContent(<Profile user={user} />);
+    setModalContent(<Profile user={user} closeModal={toggleModal}/>);
+    toggleModal();
+  };
+
+  const handleOpenSubscription = () => {
+    setAnchorEl(null);
+    setModalContent(<Subscription user={user} closeModal={toggleModal}/>);
     toggleModal();
   };
 
@@ -213,7 +220,7 @@ export default function UserMenu() {
                 </ListItemIcon>
                 Profile
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleOpenSubscription}>
                 <ListItemIcon>
                   <SubscriptionsSharpIcon fontSize="small" />
                 </ListItemIcon>
