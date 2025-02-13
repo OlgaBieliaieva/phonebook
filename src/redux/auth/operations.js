@@ -102,28 +102,82 @@ export const addAvatar = createAsyncThunk(
   "auth/addAvatar",
   async (file, thunkAPI) => {
     try {
-      // Створюємо formData для завантаження файлу
       const formData = new FormData();
       formData.append("avatar", file);
 
-      // Відправляємо PATCH запит на сервер (шлях "users/avatar" відповідає вашому маршруту)
-      const { data, status } = await workspaceApiClient.patch("users/avatar", formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const { data, status } = await workspaceApiClient.patch(
+        "users/avatar",
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (status === 200) {
-        Notify.success("Avatar updated uccessfully!");
-        return data; // Очікуємо, що сервер поверне оновлені дані користувача (наприклад, data.user)
+        Notify.success("Avatar updated successfully!");
+        return data;
       } else {
         Notify.failure("Failed to update avatar");
         return thunkAPI.rejectWithValue("Failed to update avatar");
       }
     } catch (error) {
       Notify.failure(error.response?.data?.message || error.message);
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+export const deleteAvatar = createAsyncThunk(
+  "auth/deleteAvatar",
+  async (_, thunkAPI) => {
+    try {
+      const { data, status } = await workspaceApiClient.delete("users/avatar", {
+        withCredentials: true,
+      });
+
+      if (status === 200) {
+        Notify.success("Avatar deleted successfully!");
+        return data;
+      } else {
+        Notify.failure("Failed to delete avatar");
+        return thunkAPI.rejectWithValue("Failed to delete avatar");
+      }
+    } catch (error) {
+      Notify.failure(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  "auth/updateProfile",
+  async (updatedData, thunkAPI) => {
+    try {
+      const { data, status } = await workspaceApiClient.patch(
+        "users/profile",
+        updatedData,
+        { withCredentials: true }
+      );
+
+      if (status === 200) {
+        Notify.success("Profile updated successfully!");
+        return data;
+      } else {
+        Notify.failure("Failed to update profile");
+        return thunkAPI.rejectWithValue("Failed to update profile");
+      }
+    } catch (error) {
+      Notify.failure(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
 );
