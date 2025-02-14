@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+import PhoneInput from "react-phone-input-2";
 import * as Yup from "yup";
 import { Notify } from "notiflix";
 import { useAuth } from "../../hooks/useAuth";
@@ -11,9 +12,14 @@ import addFileToStorage from "../../utils/addFileToStorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ClearSharpIcon from "@mui/icons-material/ClearSharp";
+import LocalPhoneSharpIcon from "@mui/icons-material/LocalPhoneSharp";
+import AlternateEmailSharpIcon from "@mui/icons-material/AlternateEmailSharp";
+import "react-phone-input-2/lib/material.css";
 import css from "./AddContactForm.module.css";
 
 const validationSchema = Yup.object().shape({
@@ -21,10 +27,22 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("* it's a required field"),
   middleName: Yup.string(),
   lastName: Yup.string().required("* it's a required field"),
-  jobTitle: Yup.string(),
+  position: Yup.string(),
+  department: Yup.string(),
   company: Yup.string(),
-  phone: Yup.string().required("* it's a required field"),
-  email: Yup.string(),
+  phones: Yup.array().of(
+    Yup.object().shape({
+      type: Yup.string(),
+      number: Yup.string(),
+    })
+  ),
+  emails: Yup.array().of(
+    Yup.object().shape({
+      type: Yup.string(),
+      address: Yup.string(),
+    })
+  ),
+
   birthday: Yup.string(),
   note: Yup.string(),
   groups: Yup.array().default([]),
@@ -36,10 +54,11 @@ let initialValues = {
   firstName: "",
   middleName: "",
   lastName: "",
-  jobTitle: "",
+  position: "",
+  department: "",
   company: "",
-  phone: "",
-  email: "",
+  phones: [{ type: "", number: "" }],
+  emails: [{ type: "", address: "" }],
   birthday: "",
   note: "",
   groups: [],
@@ -49,48 +68,67 @@ let initialValues = {
 export default function AddContactForm({ onClose, userGroups, userTags }) {
   const [avatarURL, setAvatarURL] = useState("");
   const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const { user } = useAuth();
   const folderName = "contactAvatars";
 
   async function addAvatar(e) {
-    const result = await addFileToStorage(e, folderName, user.id);
-    setAvatarURL(result.url);
-    setFileName(result.name);
+    // const result = await addFileToStorage(e, folderName, user.id);
+    // setAvatarURL(result.url);
+    // setFileName(result.name);
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setAvatarURL(reader.result); // Base64 URL для зображення
+        setFileName(file.name); // Ім'я файлу для alt
+      };
+
+      reader.readAsDataURL(file);
+    }
   }
 
   function deleteAvatar() {
-    removeFileFromStorage(folderName, user.id, fileName);
+    // removeFileFromStorage(folderName, user.id, fileName);
+    // setAvatarURL("");
+    // setFileName("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setAvatarURL("");
     setFileName("");
   }
 
   async function handleSubmit(values, { resetForm }) {
-    const selectedGroups = values.groups.map(
-      (selectedValue) =>
-        userGroups.find((group) => group.name === selectedValue).id
-    );
-    const selectedTags = values.tags.map(
-      (selectedValue) => userTags.find((tag) => tag.name === selectedValue).id
-    );
+    // const selectedGroups = values.groups.map(
+    //   (selectedValue) =>
+    //     userGroups.find((group) => group.name === selectedValue).id
+    // );
+    // const selectedTags = values.tags.map(
+    //   (selectedValue) => userTags.find((tag) => tag.name === selectedValue).id
+    // );
 
-    const newContact = {
-      ...values,
-      avatar: {
-        url: avatarURL,
-        name: fileName,
-      },
-      owner: user.id,
-      groups: selectedGroups,
-      tags: selectedTags,
-    };
+    // const newContact = {
+    //   ...values,
+    //   avatar: {
+    //     url: avatarURL,
+    //     name: fileName,
+    //   },
+    //   owner: user.id,
+    //   groups: selectedGroups,
+    //   tags: selectedTags,
+    // };
 
-    await dispatch(addContact(newContact))
-      .then((result) => updateContactAttributes(result.payload))
-      .then(() => Notify.success("New contact successfully added"))
-      .catch((err) => console.log(err));
-    resetForm();
-    onClose();
+    // await dispatch(addContact(newContact))
+    //   .then((result) => updateContactAttributes(result.payload))
+    //   .then(() => Notify.success("New contact successfully added"))
+    //   .catch((err) => console.log(err));
+    // resetForm();
+    // onClose();
+    console.log(values);
   }
 
   function updateContactAttributes(createdContact) {
@@ -130,7 +168,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values }) => (
+        {({ values, setFieldValue }) => (
           <Form
             className={css.form}
             name="addContactForm"
@@ -157,6 +195,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
                   className={`${css.formInput} ${css.visuallyHidden}`}
                   type="file"
                   name="avatar"
+                  innerRef={fileInputRef}
                   accept="image/*"
                   onChange={addAvatar}
                 />
@@ -219,10 +258,21 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
                 <Field
                   className={css.formInput}
                   type="text"
-                  name="jobTitle"
+                  name="position"
                   placeholder="Position"
                 />
-                <ErrorMessage name="jobTitle">
+                <ErrorMessage name="position">
+                  {(message) => <p className={css.errorText}>{message}</p>}
+                </ErrorMessage>
+              </label>
+              <label className={css.formLabel}>
+                <Field
+                  className={css.formInput}
+                  type="text"
+                  name="department"
+                  placeholder="Department"
+                />
+                <ErrorMessage name="department">
                   {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
               </label>
@@ -244,7 +294,109 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
               name="contacts"
               role="group"
             >
-              <label className={css.formLabel}>
+              <FieldArray name="phones">
+                {({ remove, push }) => (
+                  <>
+                    {values.phones.length > 0 &&
+                      values.phones.map((phone, index) => (
+                        <div key={index} className={css.listItemWrapper}>
+                          <label
+                            className={css.formLabel}
+                            htmlFor={`phones.${index}.type`}
+                          >
+                            <Field
+                              as="select"
+                              className={css.formInput}
+                              type="text"
+                              name={`phones.${index}.type`}
+                              placeholder="Phone type"
+                            >
+                              <option value="mobile">Mobile</option>
+                              <option value="work">Work</option>
+                              <option value="home">Home</option>
+                              <option value="other">Other</option>
+                            </Field>
+                          </label>
+                          <PhoneInput
+                            country={"ua"}
+                            value={values.phones[index].number}
+                            onChange={(value) =>
+                              setFieldValue(`phones.${index}.number`, value)
+                            }
+                            enableSearch={true}
+                            inputProps={{
+                              name: `phones.${index}.number`,
+                            }}
+                            specialLabel={false}
+                            inputStyle={{
+                              borderColor: "#a8aab3",
+                              boxShadow: "none",
+                            }}
+                          />
+                          <IconButton onClick={() => remove(index)}>
+                            <ClearSharpIcon />
+                          </IconButton>
+                        </div>
+                      ))}
+                    <Button
+                      startIcon={<LocalPhoneSharpIcon />}
+                      onClick={() => push({ type: "", number: "" })}
+                    >
+                      Add number
+                    </Button>
+                  </>
+                )}
+              </FieldArray>
+              <FieldArray name="emails">
+                {({ remove, push }) => (
+                  <>
+                    {values.emails.length > 0 &&
+                      values.emails.map((email, index) => (
+                        <div key={index} className={css.listItemWrapper}>
+                          <label
+                            className={css.formLabel}
+                            htmlFor={`emails.${index}.type`}
+                          >
+                            <Field
+                              as="select"
+                              className={css.formInput}
+                              type="text"
+                              name={`emails.${index}.type`}
+                              placeholder="Email type"
+                            >
+                              <option value="work">Work</option>
+                              <option value="personal">Personal</option>
+                              <option value="other">Other</option>
+                            </Field>
+                          </label>
+                          <label className={css.formLabel}>
+                            <Field
+                              className={css.formInput}
+                              type="email"
+                              name={`emails.${index}.address`}
+                              placeholder="Email"
+                            />
+                            <ErrorMessage name={`emails.${index}.address`}>
+                              {(message) => (
+                                <p className={css.errorText}>{message}</p>
+                              )}
+                            </ErrorMessage>
+                          </label>
+                          <IconButton onClick={() => remove(index)}>
+                            <ClearSharpIcon />
+                          </IconButton>
+                        </div>
+                      ))}
+                    <Button
+                      startIcon={<AlternateEmailSharpIcon />}
+                      onClick={() => push({ type: "", address: "" })}
+                    >
+                      Add email
+                    </Button>
+                  </>
+                )}
+              </FieldArray>
+              {/* <label className={css.formLabel}>
                 <Field
                   className={css.formInput}
                   type="text"
@@ -254,7 +406,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
                 <ErrorMessage name="phone">
                   {(message) => <p className={css.errorText}>{message}</p>}
                 </ErrorMessage>
-              </label>
+              </label> */}
               <label className={css.formLabel}>
                 <Field
                   className={css.formInput}
