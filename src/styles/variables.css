@@ -1,0 +1,10 @@
+:root {
+  /* COLORS */
+  --main-black: #050505;
+  --black-85: rgba(5, 5, 5, 0.85);
+  --black-40: rgba(5, 5, 5, 0.4);
+  --black-30: rgba(5, 5, 5, 0.3);
+  --main-bg: #e7ecf2;
+  --border-form: #a8aab3;
+  --border-primary: rgb(192, 192, 192);
+}

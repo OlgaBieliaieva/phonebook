@@ -6,6 +6,7 @@ import { logout, statusUpdate } from "../../redux/auth/operations";
 import Modal from "../Modal/Modal";
 import Profile from "../Profile/Profile";
 import Subscription from "../Subscription/Subscription";
+import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 //MUI
 import {
   Stack,
@@ -56,19 +57,20 @@ export default function UserMenu() {
 
   const handleOpenProfile = () => {
     setAnchorEl(null);
-    setModalContent(<Profile user={user} closeModal={toggleModal}/>);
+    setModalContent(<Profile user={user} closeModal={toggleModal} />);
     toggleModal();
   };
 
   const handleOpenSubscription = () => {
     setAnchorEl(null);
-    setModalContent(<Subscription user={user} closeModal={toggleModal}/>);
+    setModalContent(<Subscription user={user} closeModal={toggleModal} />);
     toggleModal();
   };
 
   return (
     <>
       <Stack direction="column" spacing={2} alignItems="center">
+        <ThemeSwitcher />
         <Tooltip title="Profile menu" arrow>
           <IconButton
             onClick={handleClick}

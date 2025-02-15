@@ -11,6 +11,7 @@ import { updateTag } from "../../redux/tags/operations";
 import addFileToStorage from "../../utils/addFileToStorage";
 import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
+import CustomAvatar from "../UI/FormElements/Avatar/Avatar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
@@ -181,7 +182,8 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
               name="avatar"
               role="group"
             >
-              <label className={`${css.formLabel} ${css.avatarLabel}`}>
+              <CustomAvatar />
+              {/* <label className={`${css.formLabel} ${css.avatarLabel}`}>
                 {avatarURL ? (
                   <Avatar
                     src={avatarURL}
@@ -206,7 +208,7 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
                     Remove image
                   </Button>
                 )}
-              </div>
+              </div> */}
             </fieldset>
             <fieldset
               className={css.formField}
