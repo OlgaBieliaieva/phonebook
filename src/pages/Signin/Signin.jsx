@@ -9,9 +9,6 @@ export default function Signin() {
         <Typography variant="h1">
           Keep your contacts in single space with SmartBook
         </Typography>
-        <h1 className={css.pageTitle}>
-          Keep your contacts in single space with SmartBook
-        </h1>
         <LoginForm />
       </div>
     </div>
