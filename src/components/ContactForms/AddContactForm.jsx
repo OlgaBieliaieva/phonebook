@@ -1,22 +1,22 @@
-import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+// import { useState, useRef } from "react";
+// import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import PhoneInput from "react-phone-input-2";
 import * as Yup from "yup";
-import { Notify } from "notiflix";
-import { useAuth } from "../../hooks/useAuth";
-import { addContact } from "../../redux/contacts/operations";
-import { updateGroup } from "../../redux/groups/operations";
-import { updateTag } from "../../redux/tags/operations";
-import addFileToStorage from "../../utils/addFileToStorage";
-import removeFileFromStorage from "../../utils/removeFileFromStorage";
+// import { Notify } from "notiflix";
+// import { useAuth } from "../../hooks/useAuth";
+// import { addContact } from "../../redux/contacts/operations";
+// import { updateGroup } from "../../redux/groups/operations";
+// import { updateTag } from "../../redux/tags/operations";
+// import addFileToStorage from "../../utils/addFileToStorage";
+// import removeFileFromStorage from "../../utils/removeFileFromStorage";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import CustomAvatar from "../UI/FormElements/Avatar/Avatar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import Avatar from "@mui/material/Avatar";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import Avatar from "@mui/material/Avatar";
+// import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import ClearSharpIcon from "@mui/icons-material/ClearSharp";
 import LocalPhoneSharpIcon from "@mui/icons-material/LocalPhoneSharp";
 import AlternateEmailSharpIcon from "@mui/icons-material/AlternateEmailSharp";
@@ -67,41 +67,41 @@ let initialValues = {
 };
 
 export default function AddContactForm({ onClose, userGroups, userTags }) {
-  const [avatarURL, setAvatarURL] = useState("");
-  const [fileName, setFileName] = useState("");
-  const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
-  const { user } = useAuth();
-  const folderName = "contactAvatars";
+  // const [avatarURL, setAvatarURL] = useState("");
+  // const [fileName, setFileName] = useState("");
+  // const fileInputRef = useRef(null);
+  // const dispatch = useDispatch();
+  // const { user } = useAuth();
+  // const folderName = "contactAvatars";
 
-  async function addAvatar(e) {
-    // const result = await addFileToStorage(e, folderName, user.id);
-    // setAvatarURL(result.url);
-    // setFileName(result.name);
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+  // async function addAvatar(e) {
+  //   // const result = await addFileToStorage(e, folderName, user.id);
+  //   // setAvatarURL(result.url);
+  //   // setFileName(result.name);
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setAvatarURL(reader.result); // Base64 URL для зображення
-        setFileName(file.name); // Ім'я файлу для alt
-      };
+  //     reader.onloadend = () => {
+  //       setAvatarURL(reader.result); // Base64 URL для зображення
+  //       setFileName(file.name); // Ім'я файлу для alt
+  //     };
 
-      reader.readAsDataURL(file);
-    }
-  }
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
 
-  function deleteAvatar() {
-    // removeFileFromStorage(folderName, user.id, fileName);
-    // setAvatarURL("");
-    // setFileName("");
+  // function deleteAvatar() {
+  //   // removeFileFromStorage(folderName, user.id, fileName);
+  //   // setAvatarURL("");
+  //   // setFileName("");
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-    setAvatarURL("");
-    setFileName("");
-  }
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.value = "";
+  //   }
+  //   setAvatarURL("");
+  //   setFileName("");
+  // }
 
   async function handleSubmit(values, { resetForm }) {
     // const selectedGroups = values.groups.map(
@@ -132,32 +132,32 @@ export default function AddContactForm({ onClose, userGroups, userTags }) {
     console.log(values);
   }
 
-  function updateContactAttributes(createdContact) {
-    if (createdContact.groups.length > 0) {
-      createdContact.groups
-        .map((groupId) => userGroups.find((group) => group.id === groupId))
-        .map((targetGroup) =>
-          dispatch(
-            updateGroup({
-              id: targetGroup.id,
-              members: [...targetGroup.members, createdContact.id],
-            })
-          )
-        );
-    }
-    if (createdContact.tags.length > 0) {
-      createdContact.tags
-        .map((tagId) => userTags.find((tag) => tag.id === tagId))
-        .map((targetTag) =>
-          dispatch(
-            updateTag({
-              id: targetTag.id,
-              members: [...targetTag.members, createdContact.id],
-            })
-          )
-        );
-    }
-  }
+  // function updateContactAttributes(createdContact) {
+  //   if (createdContact.groups.length > 0) {
+  //     createdContact.groups
+  //       .map((groupId) => userGroups.find((group) => group.id === groupId))
+  //       .map((targetGroup) =>
+  //         dispatch(
+  //           updateGroup({
+  //             id: targetGroup.id,
+  //             members: [...targetGroup.members, createdContact.id],
+  //           })
+  //         )
+  //       );
+  //   }
+  //   if (createdContact.tags.length > 0) {
+  //     createdContact.tags
+  //       .map((tagId) => userTags.find((tag) => tag.id === tagId))
+  //       .map((targetTag) =>
+  //         dispatch(
+  //           updateTag({
+  //             id: targetTag.id,
+  //             members: [...targetTag.members, createdContact.id],
+  //           })
+  //         )
+  //       );
+  //   }
+  // }
 
   return (
     <div className={css.formWrapper}>
