@@ -1,4 +1,63 @@
 :root {
+  /* light theme colors */
+  --light-primary-light: #5b8af2;
+  --light-primary-main: #3a6fea;
+  --light-primary-dark: #2756c5;
+  --light-primary-contrastText: #fff;
+
+  --light-secondary-light: #70c2d1;
+  --light-secondary-main: #42b0c5;
+  --light-secondary-dark: #2a8a9c;
+  --light-secondary-contrastText: #fff;
+
+  --light-error-light: #ef6f6f;
+  --light-error-main: #e64a4a;
+  --light-error-dark: #c02828;
+  --light-error-contrastText: #fff;
+
+  --light-warning-light: #ffc978;
+  --light-warning-main: #ffa831;
+  --light-warning-dark: #df8700;
+  --light-warning-contrastText: #fff;
+
+  --light-info-light: #5dadeb;
+  --light-info-main: #2996e5;
+  --light-info-dark: #1a73bf;
+  --light-info-contrastText: #fff;
+
+  --light-success-light: #58cc8c;
+  --light-success-main: #30b66d;
+  --light-success-dark: #1e8f53;
+  --light-success-contrastText: #fff;
+
+  --light-grey-50: #fafbfc;
+  --light-grey-100: #f2f4f7;
+  --light-grey-200: #e5e9ef;
+  --light-grey-300: #d2d9e1;
+  --light-grey-400: #b7c0cc;
+  --light-grey-500: #98a2b3;
+  --light-grey-600: #667085;
+  --light-grey-700: #4d5871;
+  --light-grey-800: #2e3a59;
+  --light-grey-900: #1a2035;
+
+  --light-background-default: #f9fafb;
+  --light-background-paper: #ffffff;
+
+  --light-text-primary: #1a2035;
+  --light-text-secondary: #4d5871;
+  --light-text-disabled: rgba(26, 32, 53, 0.38);
+
+  --light-divider: rgba(0, 0, 0, 0.1);
+
+  --light-action-active: rgba(58, 111, 234, 0.7);
+  --light-action-hover: rgba(58, 111, 234, 0.05);
+  --light-action-selected: rgba(58, 111, 234, 0.12);
+  --light-action-disabled: rgba(0, 0, 0, 0.26);
+  --light-action-disabledBackground: rgba(0, 0, 0, 0.12);
+
+  /* dark theme colors */
+
   /* COLORS */
   --main-black: #050505;
   --black-85: rgba(5, 5, 5, 0.85);
@@ -7,4 +66,20 @@
   --main-bg: #e7ecf2;
   --border-form: #a8aab3;
   --border-primary: rgb(192, 192, 192);
+
+  --font-primary: "Manrope", sans-serif;
+  --font-secondary: "Roboto", sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Додамо кольори */
+  --color-primary: #1976d2;
+  --color-text-primary: #000;
+  --color-background: #f4f6f8;
+}
+
+[data-theme="dark"] {
+  --color-primary: #90caf9;
+  --color-text-primary: #fff;
+  --color-background: #121212;
 }

@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Notify } from "notiflix";
 import { workspaceApiClient } from "../../services/apiClient";
 
-// axios.defaults.baseURL = 'https://667320036ca902ae11b333e3.mockapi.io/api/';
+// axios.defaults.baseURL = "https://667320036ca902ae11b333e3.mockapi.io/api/";
 
 export const register = createAsyncThunk(
   "auth/register",
