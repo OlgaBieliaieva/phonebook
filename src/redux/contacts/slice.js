@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchContacts,
   addContact,
   deleteContact,
   updateContact,
-} from './operations';
+} from "./operations";
 
-const handlePending = state => {
+const handlePending = (state) => {
   state.isLoading = true;
 };
 
@@ -16,10 +16,10 @@ const handleRejected = (state, action) => {
 };
 
 const contactsSlice = createSlice({
-  name: 'contacts',
+  name: "contacts",
   initialState: {
-    contacts: [],   
-    filter: '',
+    contacts: [],
+    filter: "",
     isLoading: false,
     error: null,
   },
@@ -28,13 +28,13 @@ const contactsSlice = createSlice({
       state.filter = action.payload;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.pending, handlePending)
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.contacts = [...action.payload];
+        state.contacts = [...action.payload.result];
       })
       .addCase(fetchContacts.rejected, handleRejected)
 
@@ -51,7 +51,7 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         const index = state.contacts.findIndex(
-          contact => contact.id === action.payload.id
+          (contact) => contact.id === action.payload.id
         );
         state.contacts.splice(index, 1);
       })
@@ -62,7 +62,7 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.error = null;
         const index = state.contacts.findIndex(
-          contact => contact.id === action.payload.id
+          (contact) => contact.id === action.payload.id
         );
         state.contacts.splice(index, 1, { ...action.payload });
       })

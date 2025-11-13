@@ -1,11 +1,13 @@
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { workspaceApiClient } from "../../services/apiClient";
 
 export const fetchContacts = createAsyncThunk(
-  'contacts/fetchContacts',
-  async (userId, thunkAPI) => {
+  "contacts/fetchContacts",
+  async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`/contacts?owner=${userId}`);
+      const response = await workspaceApiClient.get("contacts");
+      console.log(response);
 
       return response.data;
     } catch (e) {
@@ -15,10 +17,10 @@ export const fetchContacts = createAsyncThunk(
 );
 
 export const addContact = createAsyncThunk(
-  'contacts/addContact',
+  "contacts/addContact",
   async (contact, thunkAPI) => {
     try {
-      const response = await axios.post('/contacts', { ...contact });
+      const response = await axios.post("/contacts", { ...contact });
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -27,7 +29,7 @@ export const addContact = createAsyncThunk(
 );
 
 export const deleteContact = createAsyncThunk(
-  'contacts/deleteContact',
+  "contacts/deleteContact",
   async (data, thunkAPI) => {
     try {
       const response = await axios.delete(
@@ -41,7 +43,7 @@ export const deleteContact = createAsyncThunk(
 );
 
 export const updateContact = createAsyncThunk(
-  'contacts/updateContact',
+  "contacts/updateContact",
   async (newContact, thunkAPI) => {
     try {
       const response = await axios.put(`/contacts/${newContact.id}`, {

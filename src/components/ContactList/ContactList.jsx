@@ -6,28 +6,30 @@ export default function ContactList({ contacts, linkBtn, bg = false }) {
     <ul className={`${css.contactList} ${bg ? css.grey : ""}`}>
       {contacts?.map(
         ({
-          id,
+          _id,
           avatar,
           firstName,
           middleName,
           lastName,
-          jobTitle,
+          position,
+          department,
           company,
-          phone,
-          email,
+          phones,
+          emails,
         }) => {
           return (
             <ContactListItem
-              key={id}
-              id={id}
+              key={_id}
+              id={_id}
               avatar={avatar}
               firstName={firstName}
               middleName={middleName}
               lastName={lastName}
-              jobTitle={jobTitle}
+              position={position}
+              department={department}
               company={company}
-              phone={phone}
-              email={email}
+              phones={phones}
+              emails={emails}
               linkBtn={linkBtn}
             />
           );

@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Outlet, useLocation } from "react-router-dom";
+import { useTheme, Grid } from "@mui/material";
 import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
 import { filter } from "../../redux/contacts/slice";
 import { fetchContacts } from "../../redux/contacts/operations";
-import { fetchGroups } from "../../redux/groups/operations";
-import { fetchTags } from "../../redux/tags/operations";
+// import { fetchGroups } from "../../redux/groups/operations";
+// import { fetchTags } from "../../redux/tags/operations";
 import { selectFilteredContacts } from "../../redux/contacts/selectors";
 import { selectGroups } from "../../redux/groups/selectors";
 import { selectTags } from "../../redux/tags/selectors";
@@ -26,11 +27,14 @@ export default function Contacts() {
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const location = useLocation().pathname.split("/");
+  const theme = useTheme();
 
   useEffect(() => {
-    dispatch(fetchContacts(user.id));
-    dispatch(fetchGroups(user.id));
-    dispatch(fetchTags(user.id));
+    if (user?.id) {
+      dispatch(fetchContacts());
+      // dispatch(fetchGroups(user.id));
+      // dispatch(fetchTags(user.id));
+    }
   }, [dispatch, user]);
 
   const handleFilterChange = (e) => {
@@ -40,7 +44,14 @@ export default function Contacts() {
 
   return (
     <>
-      <div className={css.contactsWrapper}>
+      <Grid
+        style={{
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.text.primary,
+          borderColor: theme.palette.grey[300],
+        }}
+        className={css.contactsWrapper}
+      >
         <PageHeader
           title="All Contacts"
           btnTitle="Add Contact"
@@ -48,7 +59,7 @@ export default function Contacts() {
         >
           <Filter handleFilterChange={handleFilterChange} />
         </PageHeader>
-        <div className={css.contentWrapper}>
+        <Grid className={css.contentWrapper}>
           {contacts.length > 0 ? (
             <ContactList
               contacts={contacts}
@@ -58,7 +69,7 @@ export default function Contacts() {
           ) : (
             <InfoText text="You don't have any contact yet" />
           )}
-        </div>
+        </Grid>
         {isModalOpen && (
           <Modal onClose={toggleModal}>
             <AddContactForm
@@ -68,14 +79,14 @@ export default function Contacts() {
             />
           </Modal>
         )}
-      </div>
-      <div className={css.contactDetailsWrapper}>
+      </Grid>
+      <Grid className={css.contactDetailsWrapper}>
         {location[location.length - 1] !== "all" ? (
           <Outlet />
         ) : (
           <InfoText text="Choose some contact for details" />
         )}
-      </div>
+      </Grid>
     </>
   );
 }

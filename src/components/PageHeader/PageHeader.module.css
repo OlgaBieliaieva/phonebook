@@ -1,11 +1,9 @@
 .pageHeaderWrapper {
   width: 100%;
-  background-color: #fff;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  /* margin-bottom: 24px; */
 }
 .titleWrapper {
   display: flex;
@@ -18,8 +16,7 @@
   text-transform: capitalize;
 }
 .headerBtn {
-  padding: 4px 8px;
-  background-color: #dde1ee;
+  padding: 6px 10px;
   outline: none;
-  border-radius: 12px;
+  border-radius: 8px;
 }

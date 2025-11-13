@@ -68,6 +68,18 @@ const typography = {
     lineHeight: 1.57,
     fontFamily: "Manrope",
   },
+  subtitle3: {
+    fontSize: "0.750rem",
+    fontWeight: 500,
+    lineHeight: 1.57,
+    fontFamily: "Manrope",
+  },
+  subtitle4: {
+    fontSize: "0.625rem",
+    fontWeight: 500,
+    lineHeight: 1.57,
+    fontFamily: "Manrope",
+  },
   body1: {
     fontSize: "1rem",
     fontWeight: 400,
@@ -76,6 +88,18 @@ const typography = {
   },
   body2: {
     fontSize: "0.875rem",
+    fontWeight: 400,
+    lineHeight: 1.57,
+    fontFamily: "Manrope",
+  },
+  body3: {
+    fontSize: "0.750rem",
+    fontWeight: 400,
+    lineHeight: 1.57,
+    fontFamily: "Manrope",
+  },
+  body4: {
+    fontSize: "0.625rem",
     fontWeight: 400,
     lineHeight: 1.57,
     fontFamily: "Manrope",
