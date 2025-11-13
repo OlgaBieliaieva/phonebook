@@ -16,7 +16,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 export default function LoginForm() {
   const dispatch = useDispatch();
   const theme = useTheme();
-  console.log(theme);
 
   const handleSubmit = (e) => {
     e.preventDefault();
