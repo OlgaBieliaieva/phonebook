@@ -13,7 +13,7 @@ import {
 
 const initialState = {
   user: null,
-  statuses: null,
+  statuses: [],
   isLoggedIn: false,
   isRefreshing: false,
 };

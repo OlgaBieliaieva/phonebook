@@ -21,7 +21,9 @@ import {
   MenuList,
   FormControl,
   Select,
+  Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import SubscriptionsSharpIcon from "@mui/icons-material/SubscriptionsSharp";
 import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
@@ -41,7 +43,8 @@ export default function UserMenu() {
   const { isModalOpen, toggleModal } = useModal();
   const [modalContent, setModalContent] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [updatedStatus, setUpdatedStatus] = useState(user.status);
+  const [updatedStatus, setUpdatedStatus] = useState(user?.status);
+  const theme = useTheme();
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -161,8 +164,22 @@ export default function UserMenu() {
                   gap: 1,
                 }}
               >
-                <span className={css.mainContent}>{user?.name}</span>
-                <span className={css.secondaryContent}>{user?.email}</span>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: theme.palette.text.primary,
+                  }}
+                >
+                  {user?.name}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: theme.palette.text.secondary,
+                  }}
+                >
+                  {user?.email}
+                </Typography>
               </Box>
               <Box
                 sx={{

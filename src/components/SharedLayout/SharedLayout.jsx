@@ -1,16 +1,25 @@
-import { Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
-import Loader from '../Loader/Loader';
-import css from './SharedLayout.module.css';
+import { Suspense } from "react";
+import { Outlet } from "react-router-dom";
+import Loader from "../Loader/Loader";
+import SideBar from "../SideBar/SideBar";
+import Workspace from "../Workspace/Workspace";
+import { useTheme } from "@mui/material/styles";
+import css from "./SharedLayout.module.css";
 
 export default function SharedLayout() {
+  const theme = useTheme();
+
   return (
-    <main>
-      <div className={css.mainContainer}>
+    <div
+      className={css.mainContainer}
+      style={{ backgroundColor: theme.palette.background.default }}
+    >
+      <SideBar />
+      <Workspace>
         <Suspense fallback={<Loader />}>
           <Outlet />
         </Suspense>
-      </div>
-    </main>
+      </Workspace>
+    </div>
   );
 }

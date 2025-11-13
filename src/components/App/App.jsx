@@ -9,10 +9,9 @@ import { useAuth } from "../../hooks/useAuth";
 import { refresh } from "../../redux/auth/operations";
 import Loader from "../Loader/Loader";
 
-const Home = lazy(() => import("../../pages/Home/Home"));
 const Signin = lazy(() => import("../../pages/Signin/Signin"));
 const Signup = lazy(() => import("../../pages/Signup/Signup"));
-const Dashboard = lazy(() => import("../Dashboard/Dashboard"));
+const Dashboard = lazy(() => import("../../pages/Dashboard/Dashboard"));
 const Contacts = lazy(() => import("../../pages/Contacts/Contacts"));
 const ContactDetails = lazy(() =>
   import("../../pages/ContactDetails/ContactDetails")
@@ -23,67 +22,60 @@ const GroupDetails = lazy(() =>
 );
 
 export default function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // eslint-disable-next-line
   const { isRefreshing, user } = useAuth();
 
   useEffect(() => {
     dispatch(refresh());
   }, [dispatch]);
 
-  return isRefreshing ? (
-    <Loader />
-  ) : (
+  if (isRefreshing) return <Loader />;
+
+  return (
     <Routes>
       <Route path="/" element={<SharedLayout />}>
+        {/* Для неавторизованих користувачів */}
         <Route
           index
           element={
-            <RestrictedRoute
-              redirectTo={`/contacts/${user?.id}`}
-              component={<Signin />}
-            />
+            <RestrictedRoute redirectTo="/dashboard" component={<Signin />} />
           }
         />
         <Route
-          path="/signup"
+          path="signup"
           element={
-            <RestrictedRoute
-              redirectTo={`/contacts/${user?.id}`}
-              component={<Signup />}
-            />
+            <RestrictedRoute redirectTo="/dashboard" component={<Signup />} />
           }
         />
 
+        {/* Для авторизованих користувачів */}
         <Route
-          path="/contacts/:userId"
-          element={<PrivateRoute redirectTo="/" component={<Home />} />}
+          path="dashboard"
+          element={<PrivateRoute redirectTo="/" component={<Dashboard />} />}
+        />
+
+        <Route
+          path="contacts"
+          element={<PrivateRoute redirectTo="/" component={<Contacts />} />}
         >
           <Route
-            index
-            element={<PrivateRoute redirectTo="/" component={<Dashboard />} />}
+            path=":contactId"
+            element={
+              <PrivateRoute redirectTo="/" component={<ContactDetails />} />
+            }
           />
+        </Route>
+
+        <Route
+          path="groups"
+          element={<PrivateRoute redirectTo="/" component={<Groups />} />}
+        >
           <Route
-            path="all"
-            element={<PrivateRoute redirectTo="/" component={<Contacts />} />}
-          >
-            <Route
-              path=":contactId"
-              element={
-                <PrivateRoute redirectTo="/" component={<ContactDetails />} />
-              }
-            />
-          </Route>
-          <Route
-            path="groups"
-            element={<PrivateRoute redirectTo="/" component={<Groups />} />}
-          >
-            <Route
-              path=":group"
-              element={
-                <PrivateRoute redirectTo="/" component={<GroupDetails />} />
-              }
-            />
-          </Route>
+            path=":groupId"
+            element={
+              <PrivateRoute redirectTo="/" component={<GroupDetails />} />
+            }
+          />
         </Route>
       </Route>
     </Routes>
