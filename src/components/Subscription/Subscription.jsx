@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { updateSubscription } from "../../redux/auth/operations";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";

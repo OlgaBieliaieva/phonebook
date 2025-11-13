@@ -6,7 +6,7 @@ export default function Signin() {
   return (
     <div className={css.pageContainer}>
       <div className={css.contentWrapper}>
-        <Typography variant="h1">
+        <Typography variant="h1" color="primary.dark" className={css.pageTitle}>
           Keep your contacts in single space with SmartBook
         </Typography>
         <LoginForm />
