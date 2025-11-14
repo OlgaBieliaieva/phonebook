@@ -32,12 +32,13 @@ export default function Contact({ contact, userGroups, userTags }) {
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const folderName = "contactAvatars";
-  const birthdayArray = contact.birthday ? contact.birthday.split("-") : "";
+  const birthdayArray = contact?.birthday ? contact.birthday.split("-") : "";
+  console.log(contact);
 
-  const formattedGroups = contact.groups.map(
+  const formattedGroups = contact?.groups.map(
     (groupId) => userGroups.find((group) => group.id === groupId).name
   );
-  const formattedTags = contact.tags.map(
+  const formattedTags = contact?.tags.map(
     (tagId) => userTags.find((tag) => tag.id === tagId).name
   );
 
@@ -141,19 +142,19 @@ export default function Contact({ contact, userGroups, userTags }) {
           </ul>
           <div className={css.mainInfo}>
             <Avatar className={css.avatar}>
-              {contact.avatar.url || avatarURL ? (
+              {contact?.avatar.url || avatarURL ? (
                 <img
                   src={avatarURL ? avatarURL : contact.avatar.url}
                   alt={contact.firstName}
                 />
               ) : (
-                <span>{`${contact.firstName.slice(
+                <span>{`${contact?.firstName.slice(
                   0,
                   1
-                )}${contact.lastName.slice(0, 1)}`}</span>
+                )}${contact?.lastName.slice(0, 1)}`}</span>
               )}
             </Avatar>
-            {contact.avatar.url || avatarURL ? (
+            {contact?.avatar.url || avatarURL ? (
               <Tooltip title="remove">
                 <button
                   type="button"
@@ -184,16 +185,16 @@ export default function Contact({ contact, userGroups, userTags }) {
 
             <p
               className={css.contactName}
-            >{`${contact.firstName} ${contact.middleName} ${contact.lastName}`}</p>
+            >{`${contact?.firstName} ${contact?.middleName} ${contact?.lastName}`}</p>
             <p className={css.contactRole}>{`${
-              contact.jobTitle || "position"
-            } | ${contact.company || "company"}`}</p>
+              contact?.jobTitle || "position"
+            } | ${contact?.company || "company"}`}</p>
           </div>
           <ul className={css.contactAttributesList}>
             <li className={css.contactAttribute}>
               <GroupSharpIcon />
               <ul className={css.contactAttributeItemsList}>
-                {userGroups.map(
+                {userGroups?.map(
                   (group, index) =>
                     group.members.includes(contact.id) && (
                       <li key={index} className={css.contactAttributeItem}>
@@ -206,7 +207,7 @@ export default function Contact({ contact, userGroups, userTags }) {
             <li className={css.contactAttribute}>
               <TagSharpIcon />
               <ul className={css.contactAttributeItemsList}>
-                {userTags.map(
+                {userTags?.map(
                   (tag, index) =>
                     tag.members.includes(contact.id) && (
                       <li key={index} className={css.contactAttributeItem}>
@@ -221,14 +222,14 @@ export default function Contact({ contact, userGroups, userTags }) {
         <ul className={css.fullInfoWrapper}>
           <li className={css.infoItem}>
             <PhoneEnabledSharpIcon />
-            <a className={css.itemContent} href={`tel:${contact.phone}`}>
-              {contact.phone}
+            <a className={css.itemContent} href={`tel:${contact?.phone}`}>
+              {contact?.phone}
             </a>
           </li>
           <li className={css.infoItem}>
             <EmailSharpIcon />
-            <a className={css.itemContent} href={`mailto:${contact.email}`}>
-              {contact.email || ""}
+            <a className={css.itemContent} href={`mailto:${contact?.email}`}>
+              {contact?.email || ""}
             </a>
           </li>
           <li className={css.infoItem}>
@@ -248,7 +249,7 @@ export default function Contact({ contact, userGroups, userTags }) {
           </li>
           <li className={css.infoItem}>
             <SpeakerNotesSharpIcon />
-            <p className={css.itemContent}>{contact.note}</p>
+            <p className={css.itemContent}>{contact?.note}</p>
           </li>
         </ul>
       </div>

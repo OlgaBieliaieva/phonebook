@@ -1,45 +1,44 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+
 import { Outlet, useLocation } from "react-router-dom";
-import { useTheme, Grid } from "@mui/material";
+import { useTheme, Grid, Pagination } from "@mui/material";
+import { useDebounce } from "use-debounce";
 import useModal from "../../hooks/useModal";
 import { useAuth } from "../../hooks/useAuth";
-import { filter } from "../../redux/contacts/slice";
-import { fetchContacts } from "../../redux/contacts/operations";
-// import { fetchGroups } from "../../redux/groups/operations";
-// import { fetchTags } from "../../redux/tags/operations";
-import { selectFilteredContacts } from "../../redux/contacts/selectors";
-import { selectGroups } from "../../redux/groups/selectors";
-import { selectTags } from "../../redux/tags/selectors";
+import { useContacts } from "../../services/api/contacts/queries";
 import Modal from "../../components/Modal/Modal";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import Filter from "../../components/Filter/Filter";
 import ContactList from "../../components/ContactList/ContactList";
 import AddContactForm from "../../components/ContactForms/AddContactForm";
 import InfoText from "../../components/InfoText/InfoText";
+import Loader from "../../components/Loader/Loader";
 import css from "./Contacts.module.css";
 
 export default function Contacts() {
-  const contacts = useSelector(selectFilteredContacts);
-  const groups = useSelector(selectGroups);
-  const tags = useSelector(selectTags);
-  const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [filterValue, setFilterValue] = useState("");
+  const [debouncedFilter] = useDebounce(filterValue, 600);
+  const { data, isLoading, isError } = useContacts({
+    page,
+    filter: debouncedFilter,
+  });
+
   const { isModalOpen, toggleModal } = useModal();
   const { user } = useAuth();
   const location = useLocation().pathname.split("/");
   const theme = useTheme();
 
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(fetchContacts());
-      // dispatch(fetchGroups(user.id));
-      // dispatch(fetchTags(user.id));
-    }
-  }, [dispatch, user]);
+  if (isLoading) return <Loader />;
+  if (isError) return <p>Failed to load contacts</p>;
 
   const handleFilterChange = (e) => {
-    const { value } = e.target;
-    dispatch(filter(value));
+    setFilterValue(e.target.value);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
   };
 
   return (
@@ -57,15 +56,26 @@ export default function Contacts() {
           btnTitle="Add Contact"
           btnAction={toggleModal}
         >
-          <Filter handleFilterChange={handleFilterChange} />
+          <Filter handleFilterChange={handleFilterChange} value={filterValue} />
         </PageHeader>
         <Grid className={css.contentWrapper}>
-          {contacts.length > 0 ? (
-            <ContactList
-              contacts={contacts}
-              linkBtn={true}
-              currentUser={user}
-            />
+          {data.result.length > 0 ? (
+            <>
+              <ContactList
+                contacts={data.result}
+                linkBtn={true}
+                currentUser={user}
+              />
+              <Pagination
+                count={Math.ceil(data.total / data.limit)}
+                page={page}
+                onChange={(event, value) => handlePageChange(value)}
+                showFirstButton
+                showLastButton
+                color="primary.light"
+                sx={{ mt: 2, mb: 2 }}
+              />
+            </>
           ) : (
             <InfoText text="You don't have any contact yet" />
           )}
@@ -74,8 +84,8 @@ export default function Contacts() {
           <Modal onClose={toggleModal}>
             <AddContactForm
               onClose={toggleModal}
-              userGroups={groups}
-              userTags={tags}
+              // userGroups={groups}
+              // userTags={tags}
             />
           </Modal>
         )}

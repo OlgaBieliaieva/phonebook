@@ -17,6 +17,7 @@ export default function ContactDetails() {
   function goBack() {
     navigate(-1);
   }
+  console.log(contacts);
 
   return (
     <div className={css.contactDetailsWrapper}>

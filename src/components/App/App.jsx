@@ -1,6 +1,7 @@
 import { useEffect, lazy, Suspense } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
+import QueryProvider from "../../providers/QueryProvider";
 import { PrivateRoute } from "../PrivateRoute";
 import { RestrictedRoute } from "../RestrictedRoute";
 import SharedLayout from "../SharedLayout/SharedLayout";
@@ -35,54 +36,64 @@ export default function App() {
   if (isRefreshing) return <Loader />;
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Routes>
-        {/* Layout без сайдбару для auth */}
-        <Route element={<AuthLayout />}>
-          <Route
-            path="/"
-            element={
-              <RestrictedRoute redirectTo="/dashboard" component={<Signin />} />
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <RestrictedRoute redirectTo="/dashboard" component={<Signup />} />
-            }
-          />
-        </Route>
+    <QueryProvider>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {/* Layout без сайдбару для auth */}
+          <Route element={<AuthLayout />}>
+            <Route
+              path="/"
+              element={
+                <RestrictedRoute
+                  redirectTo="/dashboard"
+                  component={<Signin />}
+                />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <RestrictedRoute
+                  redirectTo="/dashboard"
+                  component={<Signup />}
+                />
+              }
+            />
+          </Route>
 
-        {/* Основний layout із сайдбаром */}
-        <Route element={<SharedLayout />}>
-          <Route
-            path="/dashboard"
-            element={<PrivateRoute redirectTo="/" component={<Dashboard />} />}
-          />
-          <Route
-            path="/contacts"
-            element={<PrivateRoute redirectTo="/" component={<Contacts />} />}
-          >
+          {/* Основний layout із сайдбаром */}
+          <Route element={<SharedLayout />}>
             <Route
-              path=":contactId"
+              path="/dashboard"
               element={
-                <PrivateRoute redirectTo="/" component={<ContactDetails />} />
+                <PrivateRoute redirectTo="/" component={<Dashboard />} />
               }
             />
-          </Route>
-          <Route
-            path="/groups"
-            element={<PrivateRoute redirectTo="/" component={<Groups />} />}
-          >
             <Route
-              path=":groupId"
-              element={
-                <PrivateRoute redirectTo="/" component={<GroupDetails />} />
-              }
-            />
+              path="/contacts"
+              element={<PrivateRoute redirectTo="/" component={<Contacts />} />}
+            >
+              <Route
+                path=":contactId"
+                element={
+                  <PrivateRoute redirectTo="/" component={<ContactDetails />} />
+                }
+              />
+            </Route>
+            <Route
+              path="/groups"
+              element={<PrivateRoute redirectTo="/" component={<Groups />} />}
+            >
+              <Route
+                path=":groupId"
+                element={
+                  <PrivateRoute redirectTo="/" component={<GroupDetails />} />
+                }
+              />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Suspense>
+    </QueryProvider>
   );
 }

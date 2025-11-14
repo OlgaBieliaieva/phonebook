@@ -10,7 +10,11 @@
 }
 .contentWrapper {
   width: 100%;
-  height: calc(100% - 98px);
+  height: calc(100% - 111px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 .contactDetailsWrapper {
   position: absolute;
